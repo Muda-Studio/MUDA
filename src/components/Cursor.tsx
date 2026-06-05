@@ -46,9 +46,7 @@ export default function Cursor() {
       className={`${styles.cursor} ${hovering ? styles.hovering : ''}`}
     >
       <div className={styles.inner}>
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="50,2 61,38 98,38 68,60 79,95 50,73 21,95 32,60 2,38 39,38" />
-        </svg>
+        <img src="/estrella.svg" alt="" className={styles.star} draggable={false} />
       </div>
     </div>
   )
