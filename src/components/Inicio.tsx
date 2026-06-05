@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import type { View } from '../App'
 import { supabase, type Talento } from '../lib/supabase'
 import { imgUrl } from '../lib/cloudinary'
+import { TalentDetail } from './Agencia'
 import styles from './Inicio.module.css'
 
 const ROL_LABEL: Record<string, string> = {
@@ -15,6 +16,7 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
   const topRef = useRef<HTMLDivElement>(null)
   const botRef = useRef<HTMLDivElement>(null)
   const [talentos, setTalentos] = useState<Talento[]>([])
+  const [selected, setSelected] = useState<Talento | null>(null)
 
   // Trae hasta 6 talentos para la tira de Agencia
   useEffect(() => {
@@ -241,7 +243,7 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
           </div>
           <div className={styles.agenciaStrip}>
             {talentos.map(t => (
-              <div key={t.id} className={styles.talentCard} onClick={() => navigate('agencia')}>
+              <div key={t.id} className={styles.talentCard} onClick={() => setSelected(t)}>
                 <div className={styles.talentImg}>
                   {t.portada_1 && (
                     <img
@@ -263,6 +265,8 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
               </div>
             ))}
           </div>
+
+          {selected && <TalentDetail t={selected} onClose={() => setSelected(null)} />}
         </section>
 
         {/* ══ ESTUDIO ════════════════════════════════════════ */}

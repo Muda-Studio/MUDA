@@ -56,7 +56,7 @@ function TalentCard({ t, onClick }: { t: Talento; onClick: () => void }) {
 }
 
 /* ── Popup de detalle ──────────────────────────────────────── */
-function TalentDetail({ t, onClose }: { t: Talento; onClose: () => void }) {
+export function TalentDetail({ t, onClose }: { t: Talento; onClose: () => void }) {
   const fotos = [t.portada_1, t.portada_2, ...(t.galeria ?? [])].filter(Boolean)
   const [active, setActive] = useState(0)
 
