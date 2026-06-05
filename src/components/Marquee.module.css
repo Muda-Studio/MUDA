@@ -1,0 +1,32 @@
+﻿.strip {
+  background: var(--terra);
+  overflow: hidden;
+  padding: 1.4rem 0;
+}
+
+.track {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+  width: max-content;
+  animation: marquee 22s linear infinite;
+}
+
+.track span {
+  font-family: var(--f-display);
+  font-size: 0.85rem;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: var(--bg);
+  white-space: nowrap;
+}
+
+.sep {
+  font-style: normal !important;
+  opacity: 0.45;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}

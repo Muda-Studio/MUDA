@@ -1,0 +1,24 @@
+﻿.footer {
+  background: var(--bg-3);
+  padding: 2rem clamp(1.5rem, 5vw, 4rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(240,234,216,0.06);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer p {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--cream-dim);
+}
+
+.logo {
+  font-family: var(--f-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.3em;
+  color: var(--cream-dim);
+}

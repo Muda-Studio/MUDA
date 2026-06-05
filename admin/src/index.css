@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-cream:    #f5ede0;
+  --color-cream-2:  #f0ead8;
+  --color-ink:      #0a0908;
+  --color-burgundy: #8b2535;
+  --color-terra:    #c4825a;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-mono:    'DM Mono', 'Courier New', monospace;
+}
+
+body {
+  margin: 0;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+}
+
+/* Animación de entrada de cada paso del wizard */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeUp { animation: fadeUp 0.3s ease both; }

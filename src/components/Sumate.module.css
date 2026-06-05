@@ -1,0 +1,205 @@
+﻿/* ══ SUMATE — formulario público ════════════════════════════ */
+.section { background: #ffffff; min-height: 100dvh; }
+
+.inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 5vw, 3rem) 6rem;
+}
+
+.label {
+  font-family: var(--f-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-family: var(--f-display);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 300;
+  line-height: 0.95;
+  color: var(--bg);
+  margin-bottom: 1.5rem;
+}
+.title em { font-style: italic; color: var(--burgundy); }
+
+.intro {
+  font-family: var(--f-display);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.8;
+  color: rgba(10,9,8,0.6);
+  max-width: 50ch;
+  margin-bottom: 3.5rem;
+}
+
+/* ── Form ──────────────────────────────────────────────────── */
+.form { display: flex; flex-direction: column; gap: 1.8rem; }
+
+.field { display: flex; flex-direction: column; gap: 0.5rem; }
+.field > label {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(10,9,8,0.45);
+}
+.hint { color: rgba(10,9,8,0.28); text-transform: none; letter-spacing: 0.04em; margin-left: 0.5rem; }
+
+.row2 { display: grid; grid-template-columns: 1fr 130px; gap: 1rem; }
+.row2eq { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.row4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; align-items: end; }
+
+.bustoToggle { display: flex; gap: 0.25rem; margin-bottom: 0.35rem; }
+.bustoOpt {
+  font-family: var(--f-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(10,9,8,0.35);
+  background: none;
+  border: 1px solid rgba(10,9,8,0.12);
+  padding: 0.2rem 0.5rem;
+  cursor: none;
+  transition: all 0.2s;
+}
+.bustoOpt:hover { color: rgba(10,9,8,0.6); }
+.bustoOptActive { color: var(--burgundy); border-color: rgba(139,37,53,0.4); }
+
+.input, .textarea {
+  font-family: var(--f-display);
+  font-size: 1.1rem;
+  color: var(--bg);
+  background: white;
+  border: 1.5px solid rgba(10,9,8,0.12);
+  padding: 0.75rem 0.9rem;
+  width: 100%;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+.input:focus, .textarea:focus { outline: none; border-color: var(--burgundy); }
+.input::placeholder, .textarea::placeholder { color: rgba(10,9,8,0.22); }
+
+/* Categoría */
+.cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+.cat {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--bg);
+  background: white;
+  border: 1.5px solid rgba(10,9,8,0.12);
+  padding: 0.9rem;
+  cursor: none;
+  transition: all 0.2s;
+}
+.cat:hover { border-color: rgba(139,37,53,0.3); }
+.catActive { border-color: var(--burgundy); background: rgba(139,37,53,0.05); color: var(--burgundy); }
+
+/* Fotos */
+.portadas { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.foto {
+  position: relative;
+  aspect-ratio: 3/4;
+  background: white;
+  border: 1.5px dashed rgba(10,9,8,0.15);
+  cursor: none;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s;
+}
+.foto:hover { border-color: var(--burgundy); }
+.fotoImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fotoPlus { font-size: 2rem; color: rgba(10,9,8,0.2); }
+.fotoLoad {
+  position: absolute; inset: 0;
+  background: rgba(10,9,8,0.55);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem;
+  font-family: var(--f-mono); font-size: 0.55rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--cream);
+}
+.spinner {
+  width: 22px; height: 22px;
+  border: 2px solid rgba(240,234,216,0.3);
+  border-top-color: var(--cream);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Galería */
+.galHead { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.6rem; }
+.galHead label {
+  font-family: var(--f-mono); font-size: 0.6rem;
+  letter-spacing: 0.16em; text-transform: uppercase; color: rgba(10,9,8,0.45);
+}
+.galAdd {
+  font-family: var(--f-mono); font-size: 0.55rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--burgundy); background: none;
+  border: 1px solid rgba(139,37,53,0.25);
+  padding: 0.3rem 0.8rem; cursor: none; transition: all 0.2s;
+}
+.galAdd:hover { background: var(--burgundy); color: white; }
+.galGrid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.galThumb { position: relative; width: 90px; height: 112px; }
+.galThumb img { width: 100%; height: 100%; object-fit: cover; }
+.galX {
+  position: absolute; top: 3px; right: 3px;
+  width: 22px; height: 22px;
+  background: rgba(10,9,8,0.6); color: white;
+  border: none; font-size: 0.55rem; cursor: none;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Acciones */
+.actions {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 1.5rem; padding-top: 2rem;
+  border-top: 1px solid rgba(10,9,8,0.1);
+}
+.btnDark {
+  font-family: var(--f-mono); font-size: 0.68rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--cream); background: var(--bg);
+  border: none; padding: 1rem 2.2rem; cursor: none;
+  transition: background 0.25s;
+}
+.btnDark:hover { background: var(--burgundy); }
+.btnDark:disabled { opacity: 0.4; cursor: not-allowed; }
+.btnGhost {
+  font-family: var(--f-mono); font-size: 0.66rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(10,9,8,0.4); background: none; border: none;
+  cursor: none; transition: color 0.2s;
+}
+.btnGhost:hover { color: var(--bg); }
+
+/* Pantalla de éxito */
+.doneWrap {
+  min-height: 100dvh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; gap: 1.5rem;
+  padding: 2rem;
+}
+.doneStar { font-size: 3rem; color: var(--terra); animation: spin 18s linear infinite; }
+.doneTitle {
+  font-family: var(--f-display); font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 300; line-height: 0.95; color: var(--bg);
+}
+.doneTitle em { font-style: italic; color: var(--burgundy); }
+.doneText {
+  font-family: var(--f-display); font-size: 1.1rem; line-height: 1.7;
+  color: rgba(10,9,8,0.6); max-width: 40ch;
+}
+
+@media (max-width: 700px) {
+  .row3, .row4 { grid-template-columns: 1fr 1fr; }
+  .cats { grid-template-columns: 1fr; }
+}

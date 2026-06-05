@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+**/node_modules/
+
+# Builds
+dist/
+**/dist/
+*.tsbuildinfo
+**/.tmp/
+
+# Variables de entorno (claves) — NUNCA subir
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Claude
+.claude/

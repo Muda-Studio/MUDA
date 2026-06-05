@@ -1,0 +1,39 @@
+/* ─── TOKENS ──────────────────────────────────────────────── */
+:root {
+  --bg:        #0a0908;
+  --bg-2:      #121110;
+  --bg-3:      #1c1a18;
+  --cream:     #f0ead8;
+  --cream-dim: #b8b0a0;
+  --terra:     #c4825a;
+  --terra-dim: #8a5a3e;
+  --wine:      #4a1520;
+  --burgundy:  #8b2535;
+  --burg-dim:  #5c1a25;
+
+  --f-display: 'Cormorant Garamond', Georgia, serif;
+  --f-mono:    'DM Mono', 'Courier New', monospace;
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: clamp(14px, 1.1vw, 17px); }
+
+body {
+  background: #ffffff;
+  color: var(--bg);
+  font-family: var(--f-display);
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+::selection { background: var(--terra); color: var(--bg); }
+
+/* En dispositivos táctiles: vuelve el cursor normal y se oculta la estrella */
+@media (hover: none), (pointer: coarse) {
+  body, * { cursor: auto !important; }
+  a, button, [role="button"] { cursor: pointer !important; }
+}

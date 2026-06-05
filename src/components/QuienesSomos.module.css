@@ -1,0 +1,117 @@
+﻿/* ══ QUIÉNES SOMOS ═══════════════════════════════════════════ */
+.section {
+  background: #ffffff;
+  min-height: 100dvh;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+.left { position: relative; }
+
+.heading {
+  font-family: var(--f-display);
+  font-size: clamp(3.2rem, 6.5vw, 6rem);
+  font-weight: 300;
+  line-height: 0.95;
+  color: var(--bg);
+  margin-bottom: 2.5rem;
+}
+.heading em { font-style: italic; color: var(--burgundy); }
+
+.statement {
+  font-family: var(--f-display);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.85;
+  color: rgba(10,9,8,0.62);
+  margin-bottom: 1.5rem;
+  max-width: 52ch;
+}
+
+.diff {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 2.5rem;
+  border-top: 1px solid rgba(10,9,8,0.1);
+}
+.diff li {
+  font-family: var(--f-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: rgba(10,9,8,0.5);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgba(10,9,8,0.07);
+  transition: color 0.2s, padding-left 0.3s var(--ease-expo);
+}
+.diff li::before {
+  content: '☆';
+  color: var(--terra);
+  font-size: 0.55rem;
+  flex-shrink: 0;
+}
+.diff li:hover {
+  color: var(--bg);
+  padding-left: 0.6rem;
+}
+
+/* ── Bio cards ─────────────────────────────────────────────── */
+.bios { display: flex; flex-direction: column; gap: 2px; }
+
+.bioCard {
+  padding: 2.5rem 2.5rem 2.5rem 2rem;
+  border-left: 3px solid var(--terra);
+  background: rgba(240,234,216,0.6);
+  transition: background 0.3s, border-left-color 0.3s;
+  cursor: default;
+}
+.bioCard:hover { background: white; border-left-color: var(--burgundy); }
+
+.bioName {
+  font-family: var(--f-display);
+  font-size: 1.7rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--bg);
+  margin-bottom: 0.2rem;
+  line-height: 1;
+}
+
+.bioAlias {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 1.3rem;
+}
+
+.bioText {
+  font-family: var(--f-display);
+  font-size: 0.92rem;
+  line-height: 1.9;
+  color: rgba(10,9,8,0.58);
+}
+
+.bioIg {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: var(--burgundy);
+  margin-top: 1rem;
+  display: inline-block;
+  border-bottom: 1px solid rgba(139,37,53,0.35);
+  padding-bottom: 0.15rem;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; gap: 3.5rem; }
+}

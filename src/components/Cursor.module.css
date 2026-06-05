@@ -1,0 +1,35 @@
+﻿.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 28px; height: 28px;
+  margin-left: -14px;   /* centra sin usar transform */
+  margin-top: -14px;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+}
+
+/* El scale del hover va en un wrapper interno para no pisar
+   el transform de posición que setea el JS por frame */
+.inner {
+  width: 100%; height: 100%;
+  transition: transform 0.15s var(--ease-expo);
+}
+.hovering .inner { transform: scale(1.7); }
+
+.cursor svg {
+  width: 100%; height: 100%;
+  fill: var(--terra);
+  animation: spin 8s linear infinite;
+}
+.hovering svg { animation-duration: 1.2s; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Ocultar la estrella en dispositivos táctiles (mobile/tablet) */
+@media (hover: none), (pointer: coarse) {
+  .cursor { display: none !important; }
+}

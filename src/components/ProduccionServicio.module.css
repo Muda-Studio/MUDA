@@ -1,0 +1,157 @@
+﻿/* ══ VISTA DE SERVICIO INDIVIDUAL ═══════════════════════════ */
+.section {
+  background: #ffffff;
+  min-height: 100dvh;
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(5rem, 10vw, 9rem) clamp(1.5rem, 5vw, 4rem);
+}
+
+/* Número + label */
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.num {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--terra);
+}
+
+.label {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(10,9,8,0.35);
+}
+
+/* Heading grande */
+.heading {
+  font-family: var(--f-display);
+  font-size: clamp(4rem, 10vw, 9rem);
+  font-weight: 300;
+  line-height: 0.92;
+  color: var(--bg);
+  margin-bottom: 5rem;
+}
+.heading em {
+  font-style: italic;
+  color: var(--burgundy);
+}
+
+/* Grid 2 columnas */
+.body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+  border-top: 1px solid rgba(10,9,8,0.1);
+  padding-top: 4rem;
+}
+
+.col {}
+
+.lead {
+  font-family: var(--f-display);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--bg);
+  margin-bottom: 2rem;
+}
+
+.text {
+  font-family: var(--f-display);
+  font-size: 1rem;
+  line-height: 1.85;
+  color: rgba(10,9,8,0.6);
+  margin-bottom: 1.5rem;
+}
+.text strong { color: var(--bg); font-weight: 400; }
+
+.cta {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: var(--f-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--bg);
+  padding: 0.9rem 2rem;
+  text-decoration: none;
+  transition: background 0.25s;
+}
+.cta:hover { background: var(--burgundy); }
+
+/* Lista */
+.incluye {
+  font-family: var(--f-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 1.2rem;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(10,9,8,0.08);
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--f-display);
+  font-size: 0.95rem;
+  color: rgba(10,9,8,0.65);
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(10,9,8,0.07);
+  transition: padding-left 0.3s var(--ease-expo), color 0.2s;
+}
+.list li:hover { padding-left: 0.5rem; color: var(--bg); }
+
+.dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--terra);
+  flex-shrink: 0;
+}
+
+.dotOff {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  border: 1px solid rgba(10,9,8,0.3);
+  flex-shrink: 0;
+}
+
+.nota {
+  margin-top: 2.5rem;
+  padding: 1.2rem 1.5rem;
+  border-left: 2px solid var(--terra);
+  background: rgba(196,130,90,0.06);
+}
+.nota p {
+  font-family: var(--f-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  color: rgba(10,9,8,0.5);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .body { grid-template-columns: 1fr; gap: 3rem; }
+  .heading { margin-bottom: 3rem; }
+}

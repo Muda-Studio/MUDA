@@ -1,0 +1,165 @@
+﻿/* ══ ESTUDIO ════════════════════════════════════════════════ */
+.section { background: #ffffff; min-height: 100dvh; overflow: hidden; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100dvh;
+}
+
+/* Columna izquierda: crema */
+.content {
+  padding: clamp(4rem, 8vw, 8rem) clamp(2rem, 5vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.heading {
+  font-family: var(--f-display);
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  font-weight: 300;
+  line-height: 0.97;
+  color: var(--bg);
+  margin-bottom: 1.5rem;
+}
+.heading em { font-style: italic; color: var(--burgundy); }
+
+.location {
+  font-family: var(--f-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.location::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--terra);
+  flex-shrink: 0;
+}
+
+.desc {
+  font-family: var(--f-display);
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  line-height: 1.9;
+  color: rgba(10,9,8,0.58);
+  margin-bottom: 3rem;
+  max-width: 46ch;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: rgba(10,9,8,0.1);
+}
+
+.feature {
+  padding: 1.4rem 1.6rem;
+  background: #ffffff;
+  transition: background 0.3s;
+  border-left: 2px solid transparent;
+  transition: background 0.3s, border-left-color 0.3s;
+}
+.feature:hover { background: white; border-left-color: var(--terra); }
+
+.featureTitle {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  margin-bottom: 0.5rem;
+}
+
+.featureDesc {
+  font-family: var(--f-display);
+  font-size: 0.88rem;
+  color: rgba(10,9,8,0.55);
+  line-height: 1.6;
+}
+
+/* Columna derecha: bordó sólido */
+.visual {
+  background: var(--burgundy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  gap: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Patrón de cuadrícula sutil */
+.visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(240,234,216,0.04) 39px, rgba(240,234,216,0.04) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(240,234,216,0.04) 39px, rgba(240,234,216,0.04) 40px);
+  pointer-events: none;
+}
+
+/* Caja 3D de la sala */
+.room {
+  position: relative;
+  z-index: 1;
+  width: 210px; height: 210px;
+  border: 1px solid rgba(240,234,216,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(240,234,216,0.04);
+  transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.room::before, .room::after {
+  content: '';
+  position: absolute;
+  border: 1px solid rgba(240,234,216,0.1);
+}
+.room::before { inset: 16px; }
+.room::after  { inset: 32px; }
+
+.roomLabel {
+  font-family: var(--f-display);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: rgba(240,234,216,0.7);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  line-height: 1.6;
+}
+
+.tags {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.vtag {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(240,234,216,0.45);
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .features { grid-template-columns: 1fr; }
+  .visual { min-height: 320px; }
+}
