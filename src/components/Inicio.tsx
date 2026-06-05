@@ -237,7 +237,7 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
             </p>
             <div className={styles.agenciaBtns}>
               <button className={styles.fillBtnDark} onClick={() => navigate('agencia')}>
-                Ver base de talentos →
+                Ver todos →
               </button>
             </div>
           </div>
