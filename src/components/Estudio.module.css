@@ -110,50 +110,93 @@
   pointer-events: none;
 }
 
-/* Caja 3D de la sala */
-.room {
+/* Galería editorial del estudio */
+.gallery {
   position: relative;
   z-index: 1;
-  width: 210px; height: 210px;
-  border: 1px solid rgba(240,234,216,0.25);
+  width: 100%;
+  max-width: 440px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 130px;
+  gap: 10px;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+
+.cell {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  background: rgba(240,234,216,0.05);
+  border: 1px solid rgba(240,234,216,0.14);
+  cursor: pointer;
+  /* entrada escalonada */
+  opacity: 0;
+  transform: translateY(14px);
+  animation: cellIn 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes cellIn { to { opacity: 1; transform: translateY(0); } }
+
+.tall { grid-row: span 2; }
+.wide { grid-column: span 2; }
+
+.cellImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) contrast(1.02);
+  transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), filter 0.5s;
+}
+.cell:hover .cellImg { transform: scale(1.07); filter: saturate(1.05) contrast(1.05); }
+
+/* etiqueta en mono, abajo a la izquierda */
+.cellLabel {
+  position: absolute;
+  left: 0; bottom: 0;
+  padding: 0.4rem 0.6rem;
+  font-family: var(--f-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream, #f0ead8);
+  background: linear-gradient(to top, rgba(10,9,8,0.55), transparent);
+  width: 100%;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s, transform 0.35s;
+  pointer-events: none;
+}
+.cell:hover .cellLabel { opacity: 1; transform: translateY(0); }
+
+/* estado sin imagen (placeholder elegante mientras no haya foto) */
+.empty .cellImg { display: none; }
+.empty {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(240,234,216,0.04);
-  transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
 }
-.room::before, .room::after {
-  content: '';
-  position: absolute;
-  border: 1px solid rgba(240,234,216,0.1);
+.empty::after {
+  content: attr(data-x);
 }
-.room::before { inset: 16px; }
-.room::after  { inset: 32px; }
-
-.roomLabel {
-  font-family: var(--f-display);
-  font-size: 0.95rem;
-  font-style: italic;
-  color: rgba(240,234,216,0.7);
+.empty .cellLabel {
+  position: static;
+  opacity: 0.5;
+  transform: none;
+  background: none;
   text-align: center;
-  position: relative;
-  z-index: 1;
-  line-height: 1.6;
+  color: rgba(240,234,216,0.5);
 }
 
-.tags {
+.note {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.vtag {
+  margin-top: 1.6rem;
   font-family: var(--f-mono);
   font-size: 0.6rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(240,234,216,0.45);
 }
@@ -161,5 +204,6 @@
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
   .features { grid-template-columns: 1fr; }
-  .visual { min-height: 320px; }
+  .visual { min-height: 70vh; padding: 3rem 2rem; }
+  .gallery { max-width: 380px; grid-auto-rows: 110px; }
 }
