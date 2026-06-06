@@ -36,7 +36,11 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
     const onScroll = () => {
       const st       = scrollEl.scrollTop
       const vh       = window.innerHeight
-      const progress = Math.min(st / vh, 1)
+      // En mobile el contenido del home es más corto que una pantalla entera,
+      // así que el umbral de apertura (1 viewport) nunca se alcanzaba y el nav
+      // no aparecía. Usamos un umbral alcanzable en pantallas chicas.
+      const open     = window.innerWidth <= 820 ? vh * 0.5 : vh
+      const progress = Math.min(st / open, 1)
       const offset   = progress * (vh / 2)
 
       if (progress >= 1) {
