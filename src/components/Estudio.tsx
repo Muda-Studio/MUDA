@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import HTMLFlipBook from 'react-pageflip'
+import type { View } from '../App'
 import styles from './Estudio.module.css'
 import { imgUrl } from '../lib/cloudinary'
 import { estudioFotos, ESTUDIO_FX } from '../lib/estudioFotos'
@@ -19,10 +20,11 @@ const pad = (n: number) => String(n).padStart(2, '0')
 // react-pageflip marca todas las props como requeridas; lo usamos laxo
 const FlipBook = HTMLFlipBook as unknown as React.ComponentType<any>
 
-export default function Estudio() {
+export default function Estudio({ navigate }: { navigate: (v: View) => void }) {
   const book = useRef<any>(null)
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
+  const [portrait, setPortrait] = useState(false)
 
   const flip = (dir: number) => {
     const pf = book.current?.pageFlip?.()
@@ -33,10 +35,11 @@ export default function Estudio() {
   const fotoPages = estudioFotos.slice(1) // 5 fotos interiores
   const totalPages = total || 10
   const atStart = page <= 0
-  const atEnd = page >= totalPages - 1
+  // en doble página (landscape) la última posición muestra 2 hojas → restar 2
+  const atEnd = page >= totalPages - (portrait ? 1 : 2)
 
   return (
-    <section className={styles.section} data-nav="dark">
+    <section className={styles.section} data-nav="light">
       <header className={styles.head}>
         <p className={`${styles.eyebrow} reveal`}>Palermo · Buenos Aires</p>
         <h2 className={`${styles.headTitle} reveal d1`}>Conocé el <em>estudio.</em></h2>
@@ -63,7 +66,11 @@ export default function Estudio() {
           mobileScrollSupport
           className={styles.book}
           onFlip={(e: any) => setPage(e.data)}
-          onInit={(e: any) => setTotal(e.object?.getPageCount?.() ?? 0)}
+          onChangeOrientation={(e: any) => setPortrait(e.data === 'portrait')}
+          onInit={(e: any) => {
+            setTotal(e.object?.getPageCount?.() ?? 0)
+            setPortrait(book.current?.pageFlip?.()?.getOrientation?.() === 'portrait')
+          }}
         >
           {/* p0 — TÍTULO (página de papel) */}
           <div className={`${styles.page} ${styles.paper} ${styles.titlePage}`}>
@@ -149,13 +156,19 @@ export default function Estudio() {
             <span className={styles.cap}>{fotoPages[4].label}</span>
           </div>
 
-          {/* p9 — CONTRATAPA */}
-          <div className={`${styles.page} ${styles.cover} ${styles.back}`}>
+          {/* p9 — CONTRATAPA con CTA */}
+          <div className={`${styles.page} ${styles.back}`}>
+            <div className={styles.backFill} />
             <div className={styles.backInner}>
               <p className={styles.mast}>MUDA</p>
               <h3 className={styles.backTitle}>¿Reservás<br />tu <em>producción?</em></h3>
-              <p className={styles.backSub}>Palermo, Buenos Aires</p>
-              <p className={styles.backTag}>@muda.agcy</p>
+              <p className={styles.backSub}>
+                Contános tu proyecto y armamos la jornada en el estudio.
+              </p>
+              <button className={styles.backCta} onClick={() => navigate('contacto')}>
+                Contactanos →
+              </button>
+              <p className={styles.backTag}>Palermo, Buenos Aires · @muda.agcy</p>
             </div>
           </div>
         </FlipBook>

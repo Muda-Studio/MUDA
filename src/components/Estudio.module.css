@@ -1,6 +1,6 @@
 /* ══ ESTUDIO — revista que pasa de hoja ═════════════════════ */
 .section {
-  background: var(--burgundy);
+  background: #ffffff;
   min-height: 100dvh;
   padding: clamp(7rem, 15vh, 11rem) clamp(1.5rem, 5vw, 4rem) clamp(3.5rem, 7vh, 5.5rem);
   display: flex;
@@ -30,7 +30,7 @@
   font-size: clamp(2.3rem, 5vw, 3.8rem);
   font-weight: 300;
   line-height: 1;
-  color: var(--cream);
+  color: var(--burgundy);
 }
 .headTitle em { font-style: italic; color: var(--terra); }
 .headText {
@@ -39,15 +39,7 @@
   font-family: var(--f-display);
   font-size: clamp(0.95rem, 1.4vw, 1.1rem);
   line-height: 1.7;
-  color: rgba(240,234,216,0.66);
-}
-/* viñeta sutil */
-.section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(120% 80% at 50% 30%, transparent 40%, rgba(0,0,0,0.32) 100%);
-  pointer-events: none;
+  color: rgba(10,9,8,0.6);
 }
 
 /* libro centrado */
@@ -61,10 +53,11 @@
   max-width: 800px; /* doble página en desktop, con márgenes a los lados */
 }
 .book { touch-action: pan-y; }
-/* cada hoja es opaca (al doblarse no se ve nada a través) */
+/* cada hoja es opaca (al doblarse no se ve nada a través) + sombra flotante */
 .book :global(.stf__item) {
   background-color: var(--cream);
   backface-visibility: hidden;
+  box-shadow: 0 24px 50px -12px rgba(10,9,8,0.3);
 }
 
 /* controles */
@@ -174,37 +167,63 @@
   color: rgba(240,234,216,0.75);
 }
 
-/* contratapa */
-.back { background: var(--terra); }
+/* ── CONTRATAPA con CTA ── */
+.back { color: var(--cream); }
+/* fondo opaco a prueba del color crema de las hojas */
+.backFill {
+  position: absolute;
+  inset: 0;
+  background: var(--burgundy);
+  z-index: 0;
+}
 .backInner {
   position: relative;
+  z-index: 1;
   height: 100%;
-  padding: clamp(1.8rem, 3.5vw, 2.6rem);
-  display: flex; flex-direction: column;
+  padding: clamp(2rem, 4vw, 2.8rem);
+  display: flex; flex-direction: column; justify-content: center;
 }
 .backTitle {
-  margin-top: auto;
+  margin-top: 0.6rem;
   font-family: var(--f-display);
   font-size: clamp(2rem, 5vw, 2.8rem);
   font-weight: 300;
   line-height: 1;
   color: var(--cream);
 }
-.backTitle em { font-style: italic; }
+.backTitle em { font-style: italic; color: var(--terra); }
 .backSub {
-  margin-top: 1rem;
+  margin-top: 1.1rem;
+  font-family: var(--f-display);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(240,234,216,0.72);
+  max-width: 26ch;
+}
+.backCta {
+  align-self: flex-start;
+  margin-top: 1.8rem;
+  padding: 0.8rem 1.5rem;
+  background: var(--cream);
+  color: var(--burgundy);
+  border: 0;
+  cursor: pointer;
   font-family: var(--f-mono);
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(240,234,216,0.85);
+  transition: background 0.3s, color 0.3s, transform 0.3s;
 }
+.backCta:hover { background: var(--terra); color: var(--cream); transform: translateY(-2px); }
 .backTag {
-  margin-top: 0.4rem;
+  margin-top: 2rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(240,234,216,0.2);
   font-family: var(--f-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.18em;
-  color: rgba(240,234,216,0.7);
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(240,234,216,0.6);
 }
 
 /* ── PÁGINAS DE PAPEL (texto) ── */

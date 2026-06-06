@@ -93,7 +93,7 @@ export default function App() {
       case 'contenido-redes':     return <ProduccionRedes />
       case 'eventos':    return <Eventos />
       case 'agencia':    return <Agencia navigate={navigate} />
-      case 'estudio':    return <Estudio />
+      case 'estudio':    return <Estudio navigate={navigate} />
       case 'contacto':   return <Contacto />
       case 'sumate':     return <Sumate navigate={navigate} />
     }
