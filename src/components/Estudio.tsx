@@ -33,35 +33,43 @@ export default function Estudio() {
   // páginas de foto (después de portada + intro)
   const fotoPages = estudioFotos.slice(1) // 5 fotos interiores
 
+  const totalPages = total || 9
+  const atStart = page <= 0
+  const atEnd = page >= totalPages - 1
+
   return (
     <section className={styles.section} data-nav="dark">
-      <div className={styles.head}>
-        <p className={`${styles.kicker} reveal`}>☆ Estudio</p>
-        <h2 className={`${styles.title} reveal d1`}>La <em>revista</em><br />del espacio.</h2>
-        <p className={`${styles.hint} reveal d2`}>↗ Arrastrá la esquina para pasar de página</p>
-      </div>
-
       <div className={styles.stage}>
-        <button className={`${styles.nav} ${styles.prev}`} onClick={() => flip(-1)} aria-label="Anterior">←</button>
+        <aside className={styles.aside}>
+          <p className={`${styles.kicker} reveal`}>☆ Estudio</p>
+          <h2 className={`${styles.title} reveal d1`}>La <em>revista</em><br />del espacio.</h2>
+          <p className={`${styles.lead} reveal d2`}>
+            Nuestro espacio en Palermo, contado hoja por hoja.
+          </p>
+          <p className={`${styles.hint} reveal d2`}>↗ Arrastrá la esquina o usá las flechas</p>
+          <span className={styles.metaNo}>Nº 01 · Palermo</span>
+        </aside>
 
-        <FlipBook
-          ref={book}
-          width={470}
-          height={640}
-          size="stretch"
-          minWidth={300}
-          maxWidth={540}
-          minHeight={400}
-          maxHeight={760}
-          showCover
-          drawShadow
-          maxShadowOpacity={0.35}
-          flippingTime={750}
-          mobileScrollSupport
-          className={styles.book}
-          onFlip={(e: any) => setPage(e.data)}
-          onInit={(e: any) => setTotal(e.object?.getPageCount?.() ?? 0)}
-        >
+        <div className={styles.bookCol}>
+          <FlipBook
+            ref={book}
+            width={400}
+            height={540}
+            size="stretch"
+            minWidth={260}
+            maxWidth={420}
+            minHeight={360}
+            maxHeight={580}
+            showCover
+            usePortrait
+            drawShadow
+            maxShadowOpacity={0.35}
+            flippingTime={750}
+            mobileScrollSupport
+            className={styles.book}
+            onFlip={(e: any) => setPage(e.data)}
+            onInit={(e: any) => setTotal(e.object?.getPageCount?.() ?? 0)}
+          >
           {/* ── PORTADA ── */}
           <div className={`${styles.page} ${styles.cover}`} data-density="hard">
             <img src={pic(estudioFotos[0].id)} className={styles.coverImg} alt="" />
@@ -147,12 +155,23 @@ export default function Estudio() {
               <p className={styles.backTag}>@muda.agcy</p>
             </div>
           </div>
-        </FlipBook>
+          </FlipBook>
 
-        <button className={`${styles.nav} ${styles.nextB}`} onClick={() => flip(1)} aria-label="Siguiente">→</button>
+          <div className={styles.controls}>
+            <button
+              className={`${styles.nav} ${atStart ? styles.navHidden : ''}`}
+              onClick={() => flip(-1)}
+              aria-label="Anterior"
+            >←</button>
+            <span className={styles.counter}>{pad(Math.min(page + 1, totalPages))} / {pad(totalPages)}</span>
+            <button
+              className={`${styles.nav} ${atEnd ? styles.navHidden : ''}`}
+              onClick={() => flip(1)}
+              aria-label="Siguiente"
+            >→</button>
+          </div>
+        </div>
       </div>
-
-      <p className={styles.counter}>{pad(Math.min(page + 1, total || 1))} / {pad(total || 9)}</p>
     </section>
   )
 }
