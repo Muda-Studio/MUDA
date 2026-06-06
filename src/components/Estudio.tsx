@@ -37,6 +37,15 @@ export default function Estudio() {
 
   return (
     <section className={styles.section} data-nav="dark">
+      <header className={styles.head}>
+        <p className={`${styles.eyebrow} reveal`}>Palermo · Buenos Aires</p>
+        <h2 className={`${styles.headTitle} reveal d1`}>Conocé el <em>estudio.</em></h2>
+        <p className={`${styles.headText} reveal d2`}>
+          Nuestro espacio para producciones, contado como una revista.
+          Arrastrá la esquina o usá las flechas para pasar de hoja.
+        </p>
+      </header>
+
       <div className={styles.bookWrap}>
         <FlipBook
           ref={book}
