@@ -1,134 +1,158 @@
-import { useState, useEffect, useCallback } from 'react'
-import { createPortal } from 'react-dom'
+import { useRef, useState } from 'react'
+import HTMLFlipBook from 'react-pageflip'
 import styles from './Estudio.module.css'
 import { imgUrl } from '../lib/cloudinary'
 import { estudioFotos, ESTUDIO_FX } from '../lib/estudioFotos'
 
+const pic = (id: string) =>
+  imgUrl(id, `${ESTUDIO_FX},w_900,h_1240,c_fill,g_auto,q_auto,f_auto`)
+
 const features = [
-  { title: 'Sala Infinito', desc: 'Sala principal tipo infinito de cuatro paredes. Ideal para sesiones de fotos, campañas de moda, creación de contenido y producciones comerciales.' },
-  { title: 'Salas múltiples', desc: 'Salas de usos múltiples adaptables a cada proyecto: vestuario, reuniones de producción, maquillaje o espacios de trabajo.' },
-  { title: 'Catering incluido', desc: 'El servicio de alquiler incluye catering para el equipo de trabajo, brindando mayor comodidad durante la jornada.' },
-  { title: 'Servicios add-on', desc: 'Posibilidad de sumar maquilladora y fotógrafe profesional, a criterio y preferencia de cada cliente.' },
+  ['Sala Infinito', 'Sala principal tipo infinito de cuatro paredes.'],
+  ['Salas múltiples', 'Vestuario, reuniones, maquillaje o espacios de trabajo.'],
+  ['Catering incluido', 'Para el equipo durante toda la jornada.'],
+  ['Servicios add-on', 'Maquilladora y fotógrafe profesional opcionales.'],
 ]
 
-const N = estudioFotos.length
 const pad = (n: number) => String(n).padStart(2, '0')
 
+// los tipos de react-pageflip marcan todas las props como requeridas; lo usamos laxo
+const FlipBook = HTMLFlipBook as unknown as React.ComponentType<any>
+
 export default function Estudio() {
-  const [active, setActive] = useState(0)
-  const [lightbox, setLightbox] = useState(false)
+  const book = useRef<any>(null)
+  const [page, setPage] = useState(0)
+  const [total, setTotal] = useState(0)
 
-  const go = useCallback((dir: number) => {
-    setActive(a => (a + dir + N) % N)
-  }, [])
+  const flip = (dir: number) => {
+    const pf = book.current?.pageFlip?.()
+    if (!pf) return
+    dir > 0 ? pf.flipNext() : pf.flipPrev()
+  }
 
-  useEffect(() => {
-    document.body.style.overflow = lightbox ? 'hidden' : ''
-    const onKey = (e: KeyboardEvent) => {
-      if (!lightbox) return
-      if (e.key === 'Escape') setLightbox(false)
-      if (e.key === 'ArrowRight') go(1)
-      if (e.key === 'ArrowLeft') go(-1)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
-  }, [lightbox, go])
-
-  const cur = estudioFotos[active]
+  // páginas de foto (después de portada + intro)
+  const fotoPages = estudioFotos.slice(1) // 5 fotos interiores
 
   return (
     <section className={styles.section} data-nav="dark">
-      {/* ── HERO cinematográfico ── */}
-      <div className={styles.hero}>
-        <img
-          src={imgUrl(estudioFotos[0].id, `${ESTUDIO_FX},w_2200,h_1240,c_fill,g_auto,q_auto,f_auto`)}
-          alt="Estudio MUDA — Palermo, Buenos Aires"
-          className={styles.heroImg}
-        />
-        <div className={styles.heroOverlay} />
-        <div className={styles.heroContent}>
-          <p className={`${styles.heroKicker} reveal`}>☆ Estudio</p>
-          <h2 className={`${styles.heroH} reveal d1`}>El espacio donde<br />todo <em>cobra vida.</em></h2>
-          <p className={`${styles.heroLoc} reveal d2`}>Palermo · Buenos Aires</p>
-        </div>
-        <div className={styles.heroBadge}>{pad(N)} espacios</div>
+      <div className={styles.head}>
+        <p className={`${styles.kicker} reveal`}>☆ Estudio</p>
+        <h2 className={`${styles.title} reveal d1`}>La <em>revista</em><br />del espacio.</h2>
+        <p className={`${styles.hint} reveal d2`}>↗ Arrastrá la esquina para pasar de página</p>
       </div>
 
-      {/* ── GALERÍA: visor grande + miniaturas ── */}
-      <div className={styles.galleryWrap}>
-        <p className={styles.intro}>
-          En MUDA contamos con un espacio en Palermo pensado para producciones
-          fotográficas, audiovisuales y proyectos creativos de todo tipo.
-        </p>
+      <div className={styles.stage}>
+        <button className={`${styles.nav} ${styles.prev}`} onClick={() => flip(-1)} aria-label="Anterior">←</button>
 
-        <div className={styles.viewer}>
-          <button className={`${styles.nav} ${styles.navL}`} onClick={() => go(-1)} aria-label="Anterior">←</button>
-
-          <div className={styles.stage} onClick={() => setLightbox(true)}>
-            {estudioFotos.map((p, i) => (
-              <img
-                key={p.id}
-                src={imgUrl(p.id, `${ESTUDIO_FX},w_1600,h_1040,c_fill,g_auto,q_auto,f_auto`)}
-                alt={p.label}
-                className={`${styles.stageImg} ${i === active ? styles.on : ''}`}
-                loading={i === 0 ? 'eager' : 'lazy'}
-              />
-            ))}
-            <div className={styles.stageBar}>
-              <span className={styles.stageLabel}>{cur.label}</span>
-              <span className={styles.stageCount}>{pad(active + 1)} / {pad(N)}</span>
-            </div>
-            <span className={styles.expand}>⤢ Ampliar</span>
-          </div>
-
-          <button className={`${styles.nav} ${styles.navR}`} onClick={() => go(1)} aria-label="Siguiente">→</button>
-        </div>
-
-        <div className={styles.thumbs}>
-          {estudioFotos.map((p, i) => (
-            <button
-              key={p.id}
-              className={`${styles.thumb} ${i === active ? styles.thumbOn : ''}`}
-              onClick={() => setActive(i)}
-              aria-label={p.label}
-            >
-              <img src={imgUrl(p.id, `${ESTUDIO_FX},w_300,h_300,c_fill,g_auto,q_auto,f_auto`)} alt={p.label} loading="lazy" />
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── FEATURES (banda bordó) ── */}
-      <div className={styles.featuresWrap}>
-        <div className={styles.featuresInner}>
-          <h3 className={styles.featuresH}>Todo lo que incluye<br /><em>el espacio.</em></h3>
-          <div className={styles.features}>
-            {features.map(f => (
-              <div key={f.title} className={styles.feature}>
-                <p className={styles.featureTitle}>{f.title}</p>
-                <p className={styles.featureDesc}>{f.desc}</p>
+        <FlipBook
+          ref={book}
+          width={470}
+          height={640}
+          size="stretch"
+          minWidth={300}
+          maxWidth={540}
+          minHeight={400}
+          maxHeight={760}
+          showCover
+          drawShadow
+          maxShadowOpacity={0.35}
+          flippingTime={750}
+          mobileScrollSupport
+          className={styles.book}
+          onFlip={(e: any) => setPage(e.data)}
+          onInit={(e: any) => setTotal(e.object?.getPageCount?.() ?? 0)}
+        >
+          {/* ── PORTADA ── */}
+          <div className={`${styles.page} ${styles.cover}`} data-density="hard">
+            <img src={pic(estudioFotos[0].id)} className={styles.coverImg} alt="" />
+            <div className={styles.coverShade} />
+            <div className={styles.coverInner}>
+              <p className={styles.mast}>MUDA</p>
+              <div className={styles.coverBottom}>
+                <h3 className={styles.coverTitle}>El<br /><em>Estudio</em></h3>
+                <p className={styles.coverSub}>Nº 01 — Palermo, Buenos Aires</p>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+
+          {/* ── INTRO (texto) ── */}
+          <div className={`${styles.page} ${styles.paper}`}>
+            <div className={styles.paperInner}>
+              <p className={styles.section_n}>El espacio</p>
+              <p className={styles.intro}>
+                <span className={styles.drop}>E</span>n MUDA contamos con un espacio en
+                Palermo pensado para producciones fotográficas, audiovisuales y proyectos
+                creativos de todo tipo.
+              </p>
+              <p className={styles.introSm}>
+                Sala infinito de cuatro paredes · salas múltiples · catering incluido ·
+                servicios add-on.
+              </p>
+            </div>
+            <span className={styles.folio}>02</span>
+          </div>
+
+          {/* ── FOTO 1 ── */}
+          <div className={`${styles.page} ${styles.photoPage}`}>
+            <img src={pic(fotoPages[0].id)} className={styles.pageImg} alt={fotoPages[0].label} />
+            <span className={styles.cap}>{fotoPages[0].label}</span>
+          </div>
+
+          {/* ── FOTO 2 ── */}
+          <div className={`${styles.page} ${styles.photoPage}`}>
+            <img src={pic(fotoPages[1].id)} className={styles.pageImg} alt={fotoPages[1].label} />
+            <span className={styles.cap}>{fotoPages[1].label}</span>
+          </div>
+
+          {/* ── FEATURES (texto) ── */}
+          <div className={`${styles.page} ${styles.paper}`}>
+            <div className={styles.paperInner}>
+              <p className={styles.section_n}>Lo que incluye</p>
+              <ul className={styles.featList}>
+                {features.map(([t, d]) => (
+                  <li key={t} className={styles.featItem}>
+                    <span className={styles.featT}>{t}</span>
+                    <span className={styles.featD}>{d}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <span className={styles.folio}>05</span>
+          </div>
+
+          {/* ── FOTO 3 ── */}
+          <div className={`${styles.page} ${styles.photoPage}`}>
+            <img src={pic(fotoPages[2].id)} className={styles.pageImg} alt={fotoPages[2].label} />
+            <span className={styles.cap}>{fotoPages[2].label}</span>
+          </div>
+
+          {/* ── FOTO 4 ── */}
+          <div className={`${styles.page} ${styles.photoPage}`}>
+            <img src={pic(fotoPages[3].id)} className={styles.pageImg} alt={fotoPages[3].label} />
+            <span className={styles.cap}>{fotoPages[3].label}</span>
+          </div>
+
+          {/* ── FOTO 5 ── */}
+          <div className={`${styles.page} ${styles.photoPage}`}>
+            <img src={pic(fotoPages[4].id)} className={styles.pageImg} alt={fotoPages[4].label} />
+            <span className={styles.cap}>{fotoPages[4].label}</span>
+          </div>
+
+          {/* ── CONTRATAPA ── */}
+          <div className={`${styles.page} ${styles.cover} ${styles.back}`} data-density="hard">
+            <div className={styles.backInner}>
+              <p className={styles.mast}>MUDA</p>
+              <h3 className={styles.backTitle}>¿Reservás<br />tu <em>producción?</em></h3>
+              <p className={styles.backSub}>Palermo, Buenos Aires</p>
+              <p className={styles.backTag}>@muda.agcy</p>
+            </div>
+          </div>
+        </FlipBook>
+
+        <button className={`${styles.nav} ${styles.nextB}`} onClick={() => flip(1)} aria-label="Siguiente">→</button>
       </div>
 
-      {/* ── LIGHTBOX (portal a body para escapar el transform de la página) ── */}
-      {lightbox && createPortal(
-        <div className={styles.lightbox} onClick={() => setLightbox(false)}>
-          <button className={styles.lbClose} onClick={() => setLightbox(false)} aria-label="Cerrar">✕</button>
-          <button className={`${styles.lbNav} ${styles.lbL}`} onClick={e => { e.stopPropagation(); go(-1) }} aria-label="Anterior">←</button>
-          <img
-            src={imgUrl(cur.id, `${ESTUDIO_FX},w_1900,q_auto,f_auto`)}
-            alt={cur.label}
-            className={styles.lbImg}
-            onClick={e => e.stopPropagation()}
-          />
-          <button className={`${styles.lbNav} ${styles.lbR}`} onClick={e => { e.stopPropagation(); go(1) }} aria-label="Siguiente">→</button>
-          <div className={styles.lbCaption}>{cur.label} · {pad(active + 1)} / {pad(N)}</div>
-        </div>,
-        document.body
-      )}
+      <p className={styles.counter}>{pad(Math.min(page + 1, total || 1))} / {pad(total || 9)}</p>
     </section>
   )
 }
