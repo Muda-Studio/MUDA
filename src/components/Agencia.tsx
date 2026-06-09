@@ -100,7 +100,6 @@ export function TalentDetail({ t, onClose }: { t: Talento; onClose: () => void }
         ['Calzado',  t.talle_calzado],
         ['Pelo',     t.pelo],
         ['Ojos',     t.ojos],
-        ['Ubicación',t.ubicacion],
       ] as [string, string][]).filter(([, v]) => v)
     : ([['Edad', t.edad ? `${t.edad} años` : '']] as [string, string][]).filter(([, v]) => v)
 
@@ -133,6 +132,16 @@ export function TalentDetail({ t, onClose }: { t: Talento; onClose: () => void }
         <div className={styles.modalInfo}>
           <p className={styles.modalRole}>{t.rol || ROL_LABEL[t.categoria]}</p>
           <h2 className={styles.modalName}>{t.nombre}</h2>
+
+          {t.ubicacion && (
+            <p className={styles.modalUbic}>
+              <svg className={styles.modalPin} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 21s-6-5.2-6-10a6 6 0 1 1 12 0c0 4.8-6 10-6 10z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                <circle cx="12" cy="11" r="2.2" stroke="currentColor" strokeWidth="1.6" />
+              </svg>
+              {t.ubicacion}
+            </p>
+          )}
 
           {!isModelo && t.estilo && <p className={styles.modalEstilo}>{t.estilo}</p>}
 
