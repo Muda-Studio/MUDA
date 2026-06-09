@@ -18,7 +18,7 @@ const chapters: Chapter[] = [
     n: '01',
     title: 'Espacio Infinito',
     kicker: 'Sala blanca',
-    desc: 'Sala infinito de cuatro paredes, ideal para campañas de moda, e-commerce, contenido y producciones comerciales.',
+    desc: 'Sala principal tipo infinito de cuatro paredes. Ideal para sesiones de fotos, campañas de moda, creación de contenido y producciones comerciales.',
     fx: true,
     photos: ['espacio1_wmgx1f', 'espacio3_wiwpo3', 'espacio2_b7rpbk'],
   },
@@ -26,7 +26,7 @@ const chapters: Chapter[] = [
     n: '02',
     title: 'Salas Privadas',
     kicker: 'Espacios íntimos',
-    desc: 'Salas de usos múltiples adaptables a cada proyecto: vestuario, reuniones de producción, maquillaje o descanso del equipo.',
+    desc: 'Salas de usos múltiples adaptables a cada proyecto: vestuario, reuniones de producción, maquillaje o espacios de trabajo.',
     fx: false,
     photos: [
       'WhatsApp_Image_2026-06-09_at_08.29.49_jj8uy2',
@@ -38,7 +38,7 @@ const chapters: Chapter[] = [
     n: '03',
     title: 'Café & Comida',
     kicker: 'Pausa',
-    desc: 'El alquiler incluye catering y una estación de café para que el equipo trabaje cómodo durante toda la jornada.',
+    desc: 'El servicio de alquiler incluye catering para el equipo de trabajo, brindando mayor comodidad durante la jornada.',
     fx: false,
     photos: [
       'WhatsApp_Image_2026-06-09_at_08.30.07_1_rnvsjz',
@@ -59,8 +59,8 @@ export default function Estudio({ navigate }: { navigate: (v: View) => void }) {
         <p className={styles.eyebrow}>Palermo · Buenos Aires</p>
         <h2 className={styles.headTitle}>El <em>estudio.</em></h2>
         <p className={styles.headText}>
-          Un espacio pensado para producciones fotográficas, audiovisuales y proyectos
-          creativos. Recorrelo por dentro.
+          En MUDA contamos con un espacio en Palermo pensado para la realización de
+          producciones fotográficas, audiovisuales y proyectos creativos de todo tipo.
         </p>
       </header>
 
@@ -97,7 +97,10 @@ export default function Estudio({ navigate }: { navigate: (v: View) => void }) {
       {/* ── CTA ── */}
       <div className={styles.cta}>
         <h3 className={styles.ctaTitle}>¿Reservás<br />tu <em>producción?</em></h3>
-        <p className={styles.ctaText}>Contános tu proyecto y armamos la jornada en el estudio.</p>
+        <p className={styles.ctaText}>
+          Contános tu proyecto y armamos la jornada en el estudio. Podés sumar
+          maquilladora y fotógrafe profesional, a criterio de cada cliente.
+        </p>
         <div className={styles.ctaBtns}>
           <a
             className={styles.ctaBtn}
