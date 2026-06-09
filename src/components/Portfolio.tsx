@@ -87,6 +87,7 @@ export default function Portfolio({ categoria, emptyText = 'Próximamente…' }:
           </header>
 
           <div className={styles.ovScroll}>
+            {open.descripcion && <p className={styles.ovDesc}>{open.descripcion}</p>}
             <div className={styles.thumbs}>
               {(open.images ?? []).map((id, i) => (
                 <button key={i} className={styles.thumb} onClick={() => setIdx(i)} aria-label={`Foto ${i + 1}`}>

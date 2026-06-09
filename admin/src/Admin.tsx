@@ -390,6 +390,7 @@ function Wizard({
 
 /* ── Wizard Producción ─────────────────────────────────────── */
 const TIPOS_PROD = [
+  'Producción completa',
   'Producción de fotos',
   'Dirección creativa visual',
   'Moda & Editorial',
@@ -410,7 +411,24 @@ function WizardProduccion({
   const [f, setF]       = useState(initial)
   const [saving, setSaving] = useState(false)
   const [galBusy, setGalBusy] = useState(0)
+  const [customOpts, setCustomOpts] = useState<string[]>([])
+  const [newTipo, setNewTipo] = useState('')
   const galeriaRef = useRef<HTMLInputElement>(null)
+
+  // Tipos: se pueden elegir VARIOS (se guardan separados por " · ")
+  const selTipos = f.tipo ? f.tipo.split(' · ').map(s => s.trim()).filter(Boolean) : []
+  const allTipos = Array.from(new Set([...TIPOS_PROD, ...customOpts, ...selTipos]))
+  const toggleTipo = (t: string) => {
+    const next = selTipos.includes(t) ? selTipos.filter(x => x !== t) : [...selTipos, t]
+    setF(p => ({ ...p, tipo: next.join(' · ') }))
+  }
+  const addCustomTipo = () => {
+    const t = newTipo.trim()
+    if (!t) return
+    if (!allTipos.includes(t)) setCustomOpts(c => [...c, t])
+    if (!selTipos.includes(t)) setF(p => ({ ...p, tipo: [...selTipos, t].join(' · ') }))
+    setNewTipo('')
+  }
 
   const set = (k: keyof typeof f) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -466,23 +484,52 @@ function WizardProduccion({
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className={fieldLabel}>Tipo (servicio / formato)</label>
+          <label className={fieldLabel}>
+            Tipo (servicio / formato)
+            <span className="text-ink/25 normal-case tracking-normal ml-2">podés elegir varios</span>
+          </label>
           <div className="grid grid-cols-4 gap-2">
-            {TIPOS_PROD.map(t => (
+            {allTipos.map(t => (
               <button key={t} type="button"
-                onClick={() => setF(p => ({ ...p, tipo: t }))}
+                onClick={() => toggleTipo(t)}
                 className={`font-mono text-[0.52rem] tracking-[0.08em] uppercase px-3 py-2.5 border cursor-pointer text-left transition-all
-                  ${f.tipo === t ? 'text-burgundy border-burgundy/30 bg-burgundy/5' : 'text-ink/38 border-ink/12 hover:border-burgundy/30'}`}>
-                {t}
+                  ${selTipos.includes(t) ? 'text-burgundy border-burgundy/30 bg-burgundy/5' : 'text-ink/38 border-ink/12 hover:border-burgundy/30'}`}>
+                {selTipos.includes(t) ? '✓ ' : ''}{t}
               </button>
             ))}
           </div>
+          <div className="flex gap-2 mt-1">
+            <input
+              value={newTipo}
+              onChange={e => setNewTipo(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addCustomTipo() } }}
+              placeholder="+ Agregar otro tipo…"
+              className="flex-1 font-mono text-[0.55rem] tracking-[0.06em] px-3 py-2.5 bg-white border border-ink/12 outline-none focus:border-burgundy/40 placeholder:text-ink/30" />
+            <button type="button" onClick={addCustomTipo}
+              className="font-mono text-[0.55rem] tracking-[0.12em] uppercase text-burgundy border border-burgundy/25 px-3 py-2.5 cursor-pointer transition-all hover:bg-burgundy hover:text-white">
+              Agregar
+            </button>
+          </div>
+        </div>
+
+        {/* Descripción (sobre todo para eventos) */}
+        <div className="flex flex-col gap-2">
+          <label className={fieldLabel}>
+            Descripción
+            <span className="text-ink/25 normal-case tracking-normal ml-2">opcional</span>
+          </label>
+          <textarea
+            value={f.descripcion ?? ''}
+            onChange={set('descripcion')}
+            rows={3}
+            placeholder="Contá brevemente de qué se trató (sobre todo útil para eventos)…"
+            className="font-display text-[0.95rem] text-ink px-3.5 py-2.5 bg-white border border-ink/12 outline-none focus:border-burgundy/40 resize-y placeholder:text-ink/30" />
         </div>
 
         <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 cursor-pointer font-mono text-[0.58rem] tracking-[0.12em] uppercase text-ink/50">
+          <label className="flex items-center gap-2 cursor-pointer font-mono text-[0.58rem] tracking-[0.1em] uppercase text-ink/50">
             <input type="checkbox" checked={f.fx} onChange={set('fx')} className="accent-[var(--burgundy)]" />
-            Aplicar filtro visual (FX Studio)
+            Realzar color (para fotos muy claras / lavadas)
           </label>
         </div>
 

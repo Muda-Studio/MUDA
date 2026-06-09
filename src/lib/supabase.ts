@@ -54,7 +54,8 @@ export type Produccion = {
   id: string
   categoria: CategoriaProduccion
   title: string
-  tipo: string
+  tipo: string            // uno o varios tipos, separados por " · "
+  descripcion: string
   year: string
   cover: string
   images: string[]
@@ -65,7 +66,8 @@ export type Produccion = {
 export const PRODUCCION_VACIA: Omit<Produccion, 'id' | 'created_at'> = {
   categoria: 'produccion',
   title: '',
-  tipo: 'Moda & Editorial',
+  tipo: '',
+  descripcion: '',
   year: new Date().getFullYear().toString(),
   cover: '',
   images: [],
