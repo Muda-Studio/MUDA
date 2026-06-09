@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase, TALENTO_VACIO, type Talento, type Categoria, type Solicitud, type Produccion, PRODUCCION_VACIA } from './lib/supabase'
-import { uploadImage, imgUrl } from './lib/cloudinary'
+import { uploadImage, uploadMedia, imgUrl, isVideo } from './lib/cloudinary'
 
 const CATS: { key: Categoria; label: string; desc: string }[] = [
   { key: 'modelos',       label: 'Modelo',        desc: 'Medidas, talles, físico' },
@@ -59,6 +59,11 @@ function Login({ onLogin }: { onLogin: () => void }) {
 /* ── Upload foto ───────────────────────────────────────────── */
 // Filtro "Realzar color" (mismo que la web). Se antepone a las transformaciones.
 const ESTUDIO_FX = 'e_brightness:-16,e_contrast:24,e_saturation:10'
+
+// Poster (frame) de un video de Cloudinary para la miniatura
+const vidPoster = (u: string) =>
+  u.replace('/video/upload/', '/video/upload/so_0,w_160,h_200,c_fill/')
+   .replace(/\.(mp4|mov|webm|m4v|ogg)(\?|$)/i, '.jpg')
 
 function FotoUpload({ url, onUrl, fx }: { url: string; onUrl: (u: string) => void; fx?: boolean }) {
   const [busy, setBusy]     = useState(false)
@@ -447,8 +452,12 @@ function WizardProduccion({
 
   const addGaleria = async (file: File) => {
     if ((f.images ?? []).length >= 12) return
-    const u = await uploadImage(file)
-    setF(p => ({ ...p, images: [...(p.images ?? []), u] }))
+    try {
+      const u = await uploadMedia(file)   // imagen o video
+      setF(p => ({ ...p, images: [...(p.images ?? []), u] }))
+    } catch (err) {
+      alert(`No se pudo subir "${file.name}".\n${(err as Error).message}\n\nSi es un video, puede que el preset de Cloudinary no permita videos todavía.`)
+    }
   }
   const removeGaleria = (i: number) =>
     setF(p => ({ ...p, images: (p.images ?? []).filter((_, idx) => idx !== i) }))
@@ -548,7 +557,7 @@ function WizardProduccion({
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-4 mb-1">
             <label className={fieldLabel}>
-              Galería <span className="text-ink/25 normal-case tracking-normal ml-2">{(f.images ?? []).length}/12 fotos</span>
+              Galería <span className="text-ink/25 normal-case tracking-normal ml-2">{(f.images ?? []).length}/12 · fotos y videos</span>
             </label>
             {(f.images ?? []).length < 12 && (
               <button type="button" disabled={galBusy > 0} onClick={() => galeriaRef.current?.click()}
@@ -562,7 +571,7 @@ function WizardProduccion({
                 Subiendo {galBusy}…
               </span>
             )}
-            <input ref={galeriaRef} type="file" accept="image/*" multiple hidden
+            <input ref={galeriaRef} type="file" accept="image/*,video/*" multiple hidden
               onChange={async e => {
                 const files = Array.from(e.target.files ?? []).slice(0, 12 - (f.images ?? []).length)
                 setGalBusy(files.length)
@@ -573,7 +582,10 @@ function WizardProduccion({
           <div className="flex flex-wrap gap-2">
             {(f.images ?? []).map((u, i) => (
               <div key={i} className="relative w-[90px] h-[112px] group">
-                <img src={imgUrl(u, `${f.fx ? `${ESTUDIO_FX},` : ''}w_160,h_200,c_fill,q_auto`)} alt="" className="w-full h-full object-cover" />
+                <img src={isVideo(u) ? vidPoster(u) : imgUrl(u, `${f.fx ? `${ESTUDIO_FX},` : ''}w_160,h_200,c_fill,q_auto`)} alt="" className="w-full h-full object-cover" />
+                {isVideo(u) && (
+                  <span className="absolute inset-0 flex items-center justify-center text-white text-[1.3rem] pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">▶</span>
+                )}
                 <button type="button" onClick={() => removeGaleria(i)}
                   className="absolute top-[3px] right-[3px] w-[22px] h-[22px] bg-ink/60 text-white border-none text-[0.55rem] cursor-pointer flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   ✕

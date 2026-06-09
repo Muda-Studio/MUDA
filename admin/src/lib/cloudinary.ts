@@ -20,3 +20,22 @@ export async function uploadImage(file: File): Promise<string> {
   const data = await res.json()
   return data.secure_url as string
 }
+
+// Sube imagen O video (endpoint auto). Devuelve la secure_url
+// (para video queda con /video/upload/…mp4, así se puede detectar).
+export async function uploadMedia(file: File): Promise<string> {
+  const fd = new FormData()
+  fd.append('file', file)
+  fd.append('upload_preset', PRESET)
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD}/auto/upload`,
+    { method: 'POST', body: fd }
+  )
+  const data = await res.json()
+  if (data.error) throw new Error(data.error.message || 'Error al subir')
+  return data.secure_url as string
+}
+
+export const isVideo = (u: string) =>
+  /\/video\/upload\//.test(u) || /\.(mp4|mov|webm|m4v|ogg)(\?|$)/i.test(u)

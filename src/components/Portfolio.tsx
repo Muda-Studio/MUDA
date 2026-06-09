@@ -11,6 +11,12 @@ const thumb = (id: string, f?: boolean) => imgUrl(id, `${fx(f)}w_440,h_440,c_fil
 const full = (id: string, f?: boolean) => imgUrl(id, `${fx(f)}w_1700,q_auto,f_auto`)
 const pad = (n: number) => String(n).padStart(2, '0')
 
+// Video de Cloudinary: detección + poster (frame) para la miniatura
+const isVideo = (u: string) => /\/video\/upload\//.test(u) || /\.(mp4|mov|webm|m4v|ogg)(\?|$)/i.test(u)
+const vidPoster = (u: string) =>
+  u.replace('/video/upload/', '/video/upload/so_0,w_440,h_440,c_fill/')
+   .replace(/\.(mp4|mov|webm|m4v|ogg)(\?|$)/i, '.jpg')
+
 type Props = { categoria: 'produccion' | 'evento'; emptyText?: string }
 
 export default function Portfolio({ categoria, emptyText = 'Próximamente…' }: Props) {
@@ -93,9 +99,9 @@ export default function Portfolio({ categoria, emptyText = 'Próximamente…' }:
               {open.descripcion && <p className={styles.ovDesc}>{open.descripcion}</p>}
               <div className={styles.thumbs}>
                 {(open.images ?? []).map((id, i) => (
-                  <button key={i} className={styles.thumb} onClick={() => setIdx(i)} aria-label={`Foto ${i + 1}`}>
-                    <img src={thumb(id, open.fx)} alt={`${open.title} ${i + 1}`} loading="lazy" />
-                    <span className={styles.thumbZoom}>⤢</span>
+                  <button key={i} className={styles.thumb} onClick={() => setIdx(i)} aria-label={`Ver ${i + 1}`}>
+                    <img src={isVideo(id) ? vidPoster(id) : thumb(id, open.fx)} alt={`${open.title} ${i + 1}`} loading="lazy" />
+                    <span className={styles.thumbZoom}>{isVideo(id) ? '▶' : '⤢'}</span>
                   </button>
                 ))}
               </div>
@@ -112,7 +118,18 @@ export default function Portfolio({ categoria, emptyText = 'Próximamente…' }:
               {open.images.length > 1 && (
                 <button className={`${styles.vArrow} ${styles.vPrev}`} onClick={e => { e.stopPropagation(); nav(-1) }} aria-label="Anterior">←</button>
               )}
-              <img className={styles.vImg} src={full(open.images[idx], open.fx)} alt="" onClick={e => e.stopPropagation()} />
+              {isVideo(open.images[idx]) ? (
+                <video
+                  className={styles.vImg}
+                  src={open.images[idx]}
+                  controls
+                  autoPlay
+                  playsInline
+                  onClick={e => e.stopPropagation()}
+                />
+              ) : (
+                <img className={styles.vImg} src={full(open.images[idx], open.fx)} alt="" onClick={e => e.stopPropagation()} />
+              )}
               {open.images.length > 1 && (
                 <button className={`${styles.vArrow} ${styles.vNext}`} onClick={e => { e.stopPropagation(); nav(1) }} aria-label="Siguiente">→</button>
               )}
