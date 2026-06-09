@@ -142,6 +142,10 @@ function ChapterPhotos({ ch }: { ch: Chapter }) {
 }
 
 const TIPOS = ['Sesión de fotos', 'Audiovisual', 'Creación de contenido', 'Campaña / e-commerce', 'Otro']
+const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D']
+const HORAS = ['—', ...Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))]
+const MINS = ['—', '00', '15', '30', '45']
 
 /* Select custom (diseñado, no el nativo del navegador) */
 function Select({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
@@ -178,6 +182,119 @@ function Select({ value, onChange, options }: { value: string; onChange: (v: str
             </li>
           ))}
         </ul>
+      )}
+    </div>
+  )
+}
+
+/* Calendario custom: mes/año navegables, día, horario opcional y "soy flexible" */
+function DatePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false)
+  const [view, setView] = useState<'days' | 'months'>('days')
+  const t = new Date(); t.setHours(0, 0, 0, 0)
+  const [vy, setVy] = useState(t.getFullYear())
+  const [vm, setVm] = useState(t.getMonth())
+  const [sel, setSel] = useState<Date | null>(null)
+  const [flexible, setFlexible] = useState(false)
+  const [hora, setHora] = useState('—')
+  const [minuto, setMinuto] = useState('—')
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', onDoc)
+    return () => document.removeEventListener('mousedown', onDoc)
+  }, [])
+
+  useEffect(() => {
+    if (flexible) { onChange('Soy flexible con la fecha'); return }
+    if (!sel) { onChange(''); return }
+    const d = `${String(sel.getDate()).padStart(2, '0')}/${String(sel.getMonth() + 1).padStart(2, '0')}/${sel.getFullYear()}`
+    const time = hora !== '—' ? ` · ${hora}:${minuto === '—' ? '00' : minuto}` : ''
+    onChange(d + time)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sel, flexible, hora, minuto])
+
+  const shift = (delta: number) => {
+    let m = vm + delta, y = vy
+    if (m < 0) { m = 11; y-- }
+    if (m > 11) { m = 0; y++ }
+    setVm(m); setVy(y)
+  }
+
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const firstOffset = (new Date(vy, vm, 1).getDay() + 6) % 7
+  const daysIn = new Date(vy, vm + 1, 0).getDate()
+  const cells: (number | null)[] = [...Array(firstOffset).fill(null), ...Array.from({ length: daysIn }, (_, i) => i + 1)]
+
+  const filled = flexible || !!sel
+  const label = flexible ? 'Soy flexible con la fecha' : sel ? value : 'Elegí una fecha'
+
+  return (
+    <div className={styles.dp} ref={ref}>
+      <button type="button" className={`${styles.selectBtn} ${open ? styles.selectOpen : ''}`} onClick={() => setOpen(o => !o)}>
+        <span className={filled ? '' : styles.dpPlaceholder}>{label}</span>
+        <span className={styles.selectChevron}>⌄</span>
+      </button>
+      {open && (
+        <div className={styles.dpPop}>
+          {view === 'days' ? (
+            <>
+              <div className={styles.dpHead}>
+                <button type="button" className={styles.dpArrow} onClick={() => shift(-1)} aria-label="Mes anterior">‹</button>
+                <button type="button" className={styles.dpTitle} onClick={() => setView('months')}>{MESES[vm]} {vy}</button>
+                <button type="button" className={styles.dpArrow} onClick={() => shift(1)} aria-label="Mes siguiente">›</button>
+              </div>
+              <div className={styles.dpWeek}>{DIAS.map(d => <span key={d}>{d}</span>)}</div>
+              <div className={styles.dpGrid}>
+                {cells.map((d, i) => {
+                  if (d === null) return <span key={'e' + i} />
+                  const date = new Date(vy, vm, d)
+                  const past = date < today
+                  const on = !!sel && date.getTime() === sel.getTime()
+                  return (
+                    <button
+                      key={d}
+                      type="button"
+                      disabled={past}
+                      className={`${styles.dpDay} ${on ? styles.dpDayOn : ''}`}
+                      onClick={() => { setSel(new Date(vy, vm, d)); setFlexible(false) }}
+                    >{d}</button>
+                  )
+                })}
+              </div>
+              <div className={styles.dpTime}>
+                <span className={styles.dpTimeLabel}>Horario (opcional)</span>
+                <div className={styles.dpTimeRow}>
+                  <Select value={hora} onChange={setHora} options={HORAS} />
+                  <span className={styles.dpColon}>:</span>
+                  <Select value={minuto} onChange={setMinuto} options={MINS} />
+                </div>
+              </div>
+              <button type="button" className={styles.dpFlex} onClick={() => { setFlexible(true); setSel(null); setOpen(false) }}>
+                No sé la fecha aún · soy flexible
+              </button>
+            </>
+          ) : (
+            <>
+              <div className={styles.dpHead}>
+                <button type="button" className={styles.dpArrow} onClick={() => setVy(vy - 1)} aria-label="Año anterior">‹</button>
+                <span className={styles.dpTitle}>{vy}</span>
+                <button type="button" className={styles.dpArrow} onClick={() => setVy(vy + 1)} aria-label="Año siguiente">›</button>
+              </div>
+              <div className={styles.dpMonths}>
+                {MESES.map((m, i) => (
+                  <button
+                    key={m}
+                    type="button"
+                    className={`${styles.dpMonthBtn} ${i === vm ? styles.dpMonthOn : ''}`}
+                    onClick={() => { setVm(i); setView('days') }}
+                  >{m.slice(0, 3)}</button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       )}
     </div>
   )
@@ -257,7 +374,7 @@ function ConsultaForm() {
       </div>
       <div className={styles.formRow}>
         <input className={styles.input} placeholder="WhatsApp / teléfono" value={f.telefono} onChange={set('telefono')} />
-        <input className={styles.input} placeholder="¿Para cuándo?" value={f.fecha} onChange={set('fecha')} />
+        <DatePicker value={f.fecha} onChange={v => setF(s => ({ ...s, fecha: v }))} />
       </div>
       <Select value={f.tipo} onChange={v => setF(s => ({ ...s, tipo: v }))} options={TIPOS} />
       <textarea
