@@ -1,97 +1,106 @@
-﻿/* ══ PRODUCCIÓN ══════════════════════════════════════════════ */
+/* ══ PRODUCCIÓN — índice editorial de producciones ══════════ */
 .section { background: #ffffff; min-height: 100dvh; }
 
+.head { max-width: 820px; margin-bottom: clamp(2.5rem, 6vw, 4.5rem); }
 .heading {
   font-family: var(--f-display);
   font-size: clamp(2.8rem, 6vw, 5.5rem);
   font-weight: 300;
-  line-height: 0.97;
-  margin-bottom: 4.5rem;
+  line-height: 0.95;
   color: var(--bg);
+  margin: 0.4rem 0 1.4rem;
 }
 .heading em { font-style: italic; color: var(--burgundy); }
+.lead {
+  font-family: var(--f-display);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  color: rgba(10,9,8,0.58);
+  max-width: 50ch;
+}
 
-.heading { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
-
-/* layout: intro + tipos */
-.layout {
+/* ── índice ── */
+.index {
+  list-style: none;
+  border-top: 1px solid rgba(10,9,8,0.14);
+}
+.row {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: start;
-  margin-bottom: clamp(2.8rem, 6vw, 4.5rem);
+  grid-template-columns: auto 1fr auto auto auto;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding: clamp(1.1rem, 2.4vw, 1.9rem) 0.4rem;
+  border-bottom: 1px solid rgba(10,9,8,0.14);
+  cursor: pointer;
+  position: relative;
+  transition: padding-left 0.4s var(--ease-expo);
 }
-.leadText {
-  font-family: var(--f-display);
-  font-size: clamp(1.1rem, 1.9vw, 1.55rem);
-  line-height: 1.55;
-  color: rgba(10,9,8,0.78);
-}
-.leadNote {
-  margin-top: 1.3rem;
-  font-family: var(--f-display);
-  font-size: clamp(0.92rem, 1.3vw, 1.02rem);
-  line-height: 1.65;
-  color: rgba(10,9,8,0.5);
-}
-
-.blockLabel {
+.rowOn { padding-left: 1.4rem; }
+.rowNum {
   font-family: var(--f-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--terra);
-  margin-bottom: 1.2rem;
-  padding-bottom: 0.7rem;
-  border-bottom: 1px solid rgba(10,9,8,0.12);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: rgba(10,9,8,0.35);
+  transition: color 0.3s;
 }
-
-/* tipos de producción (tags) */
-.tipoTags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.tipoTag {
+.rowOn .rowNum { color: var(--terra); }
+.rowTitle {
+  font-family: var(--f-display);
+  font-size: clamp(1.6rem, 3.6vw, 3rem);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--bg);
+  transition: color 0.3s;
+}
+.rowOn .rowTitle { font-style: italic; color: var(--burgundy); }
+.rowType {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(10,9,8,0.45);
+}
+.rowYear {
   font-family: var(--f-mono);
   font-size: 0.62rem;
-  letter-spacing: 0.08em;
+  color: rgba(10,9,8,0.4);
+}
+.rowGo {
+  font-family: var(--f-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--burgundy);
-  border: 1px solid rgba(122,29,46,0.28);
-  padding: 0.5rem 0.9rem;
-  transition: background 0.3s, color 0.3s;
+  color: var(--terra);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.3s, transform 0.3s;
 }
-.tipoTag:hover { background: var(--burgundy); color: var(--cream); }
+.rowOn .rowGo { opacity: 1; transform: translateX(0); }
+.rowCover { display: none; }
 
-/* qué incluye */
-.incluyeGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: rgba(10,9,8,0.1);
-  border: 1px solid rgba(10,9,8,0.1);
-  margin-bottom: 3rem;
+/* ── preview flotante (sigue al cursor) ── */
+.preview {
+  position: fixed;
+  z-index: 3000;
+  width: clamp(190px, 17vw, 290px);
+  transform: translate(28px, -50%);
+  pointer-events: none;
 }
-.incItem {
-  background: #fff;
-  padding: 1.5rem 1.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  transition: background 0.3s;
+.preview img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 34px 70px -18px rgba(10,9,8,0.45);
+  animation: pvIn 0.32s cubic-bezier(0.16,1,0.3,1) both;
+  transform-origin: center;
 }
-.incItem:hover { background: rgba(196,130,90,0.05); }
-.incT {
-  font-family: var(--f-display);
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--burgundy);
-}
-.incD {
-  font-family: var(--f-display);
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: rgba(10,9,8,0.55);
+@keyframes pvIn {
+  from { opacity: 0; transform: scale(0.9) rotate(-4deg); }
+  to   { opacity: 1; transform: scale(1) rotate(-2.5deg); }
 }
 
-/* Nota al pie */
+/* ── Nota al pie ── */
 .nota {
   margin-top: 3rem;
   padding: 1.5rem 2rem;
@@ -106,10 +115,107 @@
   line-height: 1.75;
 }
 
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; gap: 2.2rem; }
-  .incluyeGrid { grid-template-columns: 1fr 1fr; }
+/* ── Lightbox: galería de la producción ── */
+.lb {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #15100d;
+  display: flex;
+  flex-direction: column;
+  animation: lbIn 0.32s ease;
 }
-@media (max-width: 560px) {
-  .incluyeGrid { grid-template-columns: 1fr; }
+@keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+.lbHead {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1.3rem, 3vw, 2.2rem) clamp(1.3rem, 4vw, 3rem);
+  border-bottom: 1px solid rgba(240,234,216,0.12);
+}
+.lbMeta {
+  font-family: var(--f-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 0.5rem;
+}
+.lbTitle {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1;
+  color: var(--cream);
+}
+.lbClose {
+  flex-shrink: 0;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(240,234,216,0.3);
+  background: transparent;
+  color: var(--cream);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.lbClose:hover { background: rgba(240,234,216,0.12); transform: rotate(90deg); }
+.lbScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1rem, 4vw, 3rem);
+}
+.lbGallery {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 2vw, 1.4rem);
+}
+.lbCell { margin: 0; overflow: hidden; background: #221813; }
+.lbImg { width: 100%; height: auto; display: block; }
+.lbCount {
+  max-width: 820px;
+  margin: 1.6rem auto 0;
+  text-align: center;
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(240,234,216,0.4);
+}
+
+/* ── responsive: índice → tarjetas con cover ── */
+@media (max-width: 760px) {
+  .preview { display: none; }
+  .index { border-top: 0; }
+  .row {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'cover cover cover'
+      'num title year'
+      'num type type';
+    gap: 0.4rem 0.9rem;
+    padding: 0 0 1.6rem;
+    margin-bottom: 1.6rem;
+    border-bottom: 1px solid rgba(10,9,8,0.12);
+    align-items: baseline;
+  }
+  .rowOn { padding-left: 0; }
+  .rowCover {
+    display: block;
+    grid-area: cover;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    margin-bottom: 0.9rem;
+  }
+  .rowNum { grid-area: num; align-self: start; }
+  .rowTitle { grid-area: title; font-size: clamp(1.6rem, 8vw, 2.2rem); }
+  .rowType { grid-area: type; }
+  .rowYear { grid-area: year; text-align: right; }
+  .rowGo { display: none; }
 }
