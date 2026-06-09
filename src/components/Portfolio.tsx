@@ -11,11 +11,10 @@ const thumb = (id: string, f?: boolean) => imgUrl(id, `${fx(f)}w_440,h_440,c_fil
 const full = (id: string, f?: boolean) => imgUrl(id, `${fx(f)}w_1700,q_auto,f_auto`)
 const pad = (n: number) => String(n).padStart(2, '0')
 
-// Video de Cloudinary: detección + poster (frame) para la miniatura
+// Video de Cloudinary: detección + versión liviana para la miniatura (autoplay mudo)
 const isVideo = (u: string) => /\/video\/upload\//.test(u) || /\.(mp4|mov|webm|m4v|ogg)(\?|$)/i.test(u)
-const vidPoster = (u: string) =>
-  u.replace('/video/upload/', '/video/upload/so_0,w_440,h_440,c_fill/')
-   .replace(/\.(mp4|mov|webm|m4v|ogg)(\?|$)/i, '.jpg')
+const vidThumb = (u: string) =>
+  u.replace('/video/upload/', '/video/upload/w_500,h_500,c_fill,q_auto/')
 
 type Props = { categoria: 'produccion' | 'evento'; emptyText?: string }
 
@@ -100,8 +99,12 @@ export default function Portfolio({ categoria, emptyText = 'Próximamente…' }:
               <div className={styles.thumbs}>
                 {(open.images ?? []).map((id, i) => (
                   <button key={i} className={styles.thumb} onClick={() => setIdx(i)} aria-label={`Ver ${i + 1}`}>
-                    <img src={isVideo(id) ? vidPoster(id) : thumb(id, open.fx)} alt={`${open.title} ${i + 1}`} loading="lazy" />
-                    <span className={styles.thumbZoom}>{isVideo(id) ? '▶' : '⤢'}</span>
+                    {isVideo(id) ? (
+                      <video src={vidThumb(id)} muted loop autoPlay playsInline preload="metadata" />
+                    ) : (
+                      <img src={thumb(id, open.fx)} alt={`${open.title} ${i + 1}`} loading="lazy" />
+                    )}
+                    <span className={styles.thumbZoom}>⤢</span>
                   </button>
                 ))}
               </div>
