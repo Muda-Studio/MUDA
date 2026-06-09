@@ -3,7 +3,7 @@ import type { View } from '../App'
 import styles from './Estudio.module.css'
 import { imgUrl } from '../lib/cloudinary'
 import { ESTUDIO_FX } from '../lib/estudioFotos'
-import { whatsappLink } from '../lib/config'
+import { whatsappLink, WEB3FORMS_KEY } from '../lib/config'
 
 type Chapter = {
   n: string
@@ -141,6 +141,85 @@ function ChapterPhotos({ ch }: { ch: Chapter }) {
   )
 }
 
+/* Formulario de consulta → manda un mail con los datos (vía Web3Forms) */
+function ConsultaForm() {
+  const [f, setF] = useState({ nombre: '', email: '', telefono: '', fecha: '', tipo: 'Sesión de fotos', mensaje: '' })
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+    setF(s => ({ ...s, [k]: e.target.value }))
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!WEB3FORMS_KEY) { setStatus('error'); return }
+    setStatus('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `Consulta de estudio — ${f.nombre || 'sin nombre'}`,
+          from_name: 'Web MUDA · Estudio',
+          Nombre: f.nombre,
+          Email: f.email,
+          'WhatsApp / Teléfono': f.telefono,
+          'Para cuándo': f.fecha,
+          'Tipo de producción': f.tipo,
+          Mensaje: f.mensaje,
+        }),
+      })
+      const data = await res.json()
+      setStatus(data.success ? 'sent' : 'error')
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  if (status === 'sent') {
+    return (
+      <div className={styles.formDone}>
+        <p className={styles.formDoneTitle}>¡Consulta enviada! ✓</p>
+        <p className={styles.formDoneText}>Te contactamos a la brevedad. ¡Gracias!</p>
+      </div>
+    )
+  }
+
+  return (
+    <form className={styles.form} onSubmit={submit}>
+      <div className={styles.formRow}>
+        <input className={styles.input} placeholder="Nombre" required value={f.nombre} onChange={set('nombre')} />
+        <input className={styles.input} type="email" placeholder="Email" required value={f.email} onChange={set('email')} />
+      </div>
+      <div className={styles.formRow}>
+        <input className={styles.input} placeholder="WhatsApp / teléfono" value={f.telefono} onChange={set('telefono')} />
+        <input className={styles.input} placeholder="¿Para cuándo?" value={f.fecha} onChange={set('fecha')} />
+      </div>
+      <select className={styles.input} value={f.tipo} onChange={set('tipo')}>
+        {['Sesión de fotos', 'Audiovisual', 'Creación de contenido', 'Campaña / e-commerce', 'Otro'].map(o => (
+          <option key={o}>{o}</option>
+        ))}
+      </select>
+      <textarea
+        className={styles.textarea}
+        placeholder="Contanos tu proyecto: qué necesitás, fechas, equipo…"
+        rows={3}
+        value={f.mensaje}
+        onChange={set('mensaje')}
+      />
+      <button className={styles.formBtn} type="submit" disabled={status === 'sending'}>
+        {status === 'sending' ? 'Enviando…' : 'Enviar consulta →'}
+      </button>
+      {status === 'error' && (
+        <p className={styles.formError}>
+          {WEB3FORMS_KEY
+            ? 'No se pudo enviar. Probá por WhatsApp 👉'
+            : 'El formulario todavía no está activo. Por ahora escribinos por WhatsApp 👉'}
+        </p>
+      )}
+    </form>
+  )
+}
+
 export default function Estudio({ navigate }: { navigate: (v: View) => void }) {
   return (
     <section className={styles.section} data-nav="dark">
@@ -173,14 +252,14 @@ export default function Estudio({ navigate }: { navigate: (v: View) => void }) {
         ))}
       </div>
 
-      {/* ── CTA ── */}
+      {/* ── CTA con formulario ── */}
       <div className={styles.cta}>
-        <h3 className={styles.ctaTitle}>¿Reservás<br />tu <em>producción?</em></h3>
-        <p className={styles.ctaText}>
-          Contános tu proyecto y armamos la jornada en el estudio. Podés sumar
-          maquilladora y fotógrafe profesional, a criterio de cada cliente.
-        </p>
-        <div className={styles.ctaBtns}>
+        <div className={styles.ctaLeft}>
+          <h3 className={styles.ctaTitle}>¿Reservás<br />tu <em>producción?</em></h3>
+          <p className={styles.ctaText}>
+            Contános tu proyecto y armamos la jornada en el estudio. Podés sumar
+            maquilladora y fotógrafe profesional, a criterio de cada cliente.
+          </p>
           <a
             className={styles.ctaBtn}
             href={whatsappLink('¡Hola MUDA! Quiero alquilar el estudio para una producción.')}
@@ -192,6 +271,11 @@ export default function Estudio({ navigate }: { navigate: (v: View) => void }) {
           <button className={styles.ctaGhost} onClick={() => navigate('contacto')}>
             Ver contacto
           </button>
+        </div>
+
+        <div className={styles.ctaRight}>
+          <p className={styles.formLabel}>O dejanos tu consulta</p>
+          <ConsultaForm />
         </div>
       </div>
     </section>
