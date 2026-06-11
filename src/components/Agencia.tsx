@@ -59,10 +59,17 @@ function TalentCard({ t, onClick }: { t: Talento; onClick: () => void }) {
 export function TalentDetail({ t, onClose }: { t: Talento; onClose: () => void }) {
   const fotos = [t.portada_1, t.portada_2, ...(t.galeria ?? [])].filter(Boolean)
   const [active, setActive] = useState(0)
+  const [zoom, setZoom] = useState(false)
 
-  // Cerrar con Escape + bloquear scroll de la web (el scroll real está en .view-wrap)
+  const nav = (d: number) => setActive(a => (a + d + fotos.length) % fotos.length)
+
+  // Teclado + bloquear scroll de la web (el scroll real está en .view-wrap)
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { zoom ? setZoom(false) : onClose() }
+      if (zoom && e.key === 'ArrowRight') nav(1)
+      if (zoom && e.key === 'ArrowLeft') nav(-1)
+    }
     document.addEventListener('keydown', onKey)
     const scrollEl = document.querySelector<HTMLElement>('.view-wrap')
     const prev = scrollEl?.style.overflow
@@ -73,14 +80,15 @@ export function TalentDetail({ t, onClose }: { t: Talento; onClose: () => void }
       if (scrollEl) scrollEl.style.overflow = prev ?? ''
       document.body.style.overflow = ''
     }
-  }, [onClose])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onClose, zoom, fotos.length])
 
-  // Rotación automática de la galería
+  // Rotación automática de la galería (se pausa con el zoom abierto)
   useEffect(() => {
-    if (fotos.length < 2) return
+    if (fotos.length < 2 || zoom) return
     const id = setInterval(() => setActive(a => (a + 1) % fotos.length), 2800)
     return () => clearInterval(id)
-  }, [fotos.length])
+  }, [fotos.length, zoom])
 
   const isModelo = t.categoria === 'modelos'
 
@@ -110,10 +118,11 @@ export function TalentDetail({ t, onClose }: { t: Talento; onClose: () => void }
 
         {/* Galería de fotos */}
         <div className={styles.modalGallery}>
-          <div className={styles.modalMain}>
+          <div className={styles.modalMain} onClick={() => fotos[active] && setZoom(true)}>
             {fotos[active]
-              ? <img key={active} src={imgUrl(fotos[active], 'w_900,h_1100,c_fill,q_auto')} alt={t.nombre} className={styles.modalMainImg} />
+              ? <img key={active} src={imgUrl(fotos[active], 'w_1100,q_auto')} alt={t.nombre} className={styles.modalMainImg} />
               : <div className={styles.modalNoImg}>{t.nombre[0]}</div>}
+            {fotos[active] && <span className={styles.modalZoomHint}>⤢</span>}
           </div>
           {fotos.length > 1 && (
             <div className={styles.modalThumbs}>
@@ -172,6 +181,26 @@ export function TalentDetail({ t, onClose }: { t: Talento; onClose: () => void }
           <p className={styles.modalNote}>Te conectamos por WhatsApp con MUDA</p>
         </div>
       </div>
+
+      {/* Visor a pantalla completa (imagen entera, sin recortes) */}
+      {zoom && fotos[active] && (
+        <div className={styles.tViewer} onClick={e => { e.stopPropagation(); setZoom(false) }}>
+          <button className={styles.tvClose} onClick={e => { e.stopPropagation(); setZoom(false) }} aria-label="Cerrar">✕</button>
+          {fotos.length > 1 && (
+            <button className={`${styles.tvArrow} ${styles.tvPrev}`} onClick={e => { e.stopPropagation(); nav(-1) }} aria-label="Anterior">←</button>
+          )}
+          <img
+            className={styles.tvImg}
+            src={imgUrl(fotos[active], 'w_1700,q_auto')}
+            alt={t.nombre}
+            onClick={e => e.stopPropagation()}
+          />
+          {fotos.length > 1 && (
+            <button className={`${styles.tvArrow} ${styles.tvNext}`} onClick={e => { e.stopPropagation(); nav(1) }} aria-label="Siguiente">→</button>
+          )}
+          <span className={styles.tvCount}>{String(active + 1).padStart(2, '0')} / {String(fotos.length).padStart(2, '0')}</span>
+        </div>
+      )}
     </div>,
     document.body
   )

@@ -18,14 +18,21 @@ export type View = 'inicio' | 'quienes' | 'produccion' | 'foto-video' | 'direcci
 
 const ALL_VIEWS: View[] = ['inicio', 'quienes', 'produccion', 'foto-video', 'direccion-creativa', 'contenido-redes', 'eventos', 'agencia', 'estudio', 'contacto', 'sumate']
 
-// Lee la sección desde la URL (#estudio, #agencia, etc.)
-const viewFromHash = (): View => {
+// La sección viaja en history.state (URL limpia, sin #). Sobrevive recargas
+// y el botón atrás/adelante. Soporta links viejos con #seccion por compatibilidad.
+const readView = (st?: unknown): View => {
+  const s = (st ?? window.history.state) as { view?: View } | null
+  if (s?.view && ALL_VIEWS.includes(s.view)) return s.view
   const h = window.location.hash.replace('#', '') as View
   return ALL_VIEWS.includes(h) ? h : 'inicio'
 }
 
 export default function App() {
-  const initial = viewFromHash()
+  const initial = readView()
+  // Si llegó con #seccion (link viejo), limpiar la URL conservando la sección
+  if (window.location.hash) {
+    window.history.replaceState({ view: initial }, '', window.location.pathname + window.location.search)
+  }
   const [current, setCurrent] = useState<View>(initial)
   const [displayed, setDisplayed] = useState<View>(initial)
   const [animating, setAnimating] = useState(false)
@@ -41,9 +48,8 @@ export default function App() {
       homeScroll.current = mainRef.current.scrollTop
     }
     setAnimating(true)
-    // Reflejar la sección en la URL para que al recargar se mantenga
-    if (view === 'inicio') window.history.pushState(null, '', window.location.pathname)
-    else window.history.pushState(null, '', `#${view}`)
+    // Guardar la sección en el historial (URL limpia, sin #)
+    window.history.pushState({ view }, '', window.location.pathname + window.location.search)
     setTimeout(() => {
       setDisplayed(view)
       setCurrent(view)
@@ -65,8 +71,8 @@ export default function App() {
 
   // Botón atrás/adelante del navegador → cambiar de sección
   useEffect(() => {
-    const onPop = () => {
-      const v = viewFromHash()
+    const onPop = (e: PopStateEvent) => {
+      const v = readView(e.state)
       setCurrent(v)
       setDisplayed(v)
       requestAnimationFrame(() => mainRef.current?.scrollTo({ top: 0 }))
