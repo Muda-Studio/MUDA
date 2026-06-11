@@ -399,92 +399,110 @@
   color: var(--burgundy);
 }
 
-.serviciosRows {
-  display: flex;
-  flex-direction: column;
-}
-
-.sRow {
-  display: grid;
-  grid-template-columns: 5rem 1fr auto;
-  align-items: center;
-  gap: 2rem;
-  padding: 2.8rem 5rem;
-  border-bottom: 1px solid rgba(10,9,8,0.1);
-  cursor: none;
-  position: relative;
-  overflow: hidden;
-  text-decoration: none;
-}
-
-/* Fill bordó desliza desde la izquierda al hover */
-.sRow::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--burgundy);
-  transform: translateX(-100%);
-  transition: transform 0.5s var(--ease-expo);
-}
-.sRow:hover::before { transform: translateX(0); }
-
-.sNum {
+.serviciosHint {
   font-family: var(--f-mono);
   font-size: 0.6rem;
-  letter-spacing: 0.22em;
-  color: var(--terra);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(10,9,8,0.35);
+}
+
+/* ── Marquesinas editoriales ── */
+.marqRows { display: flex; flex-direction: column; }
+
+.marqRow {
   position: relative;
-  z-index: 1;
-  transition: color 0.35s;
+  overflow: hidden;
+  padding: clamp(1.6rem, 3.2vw, 2.8rem) 0 clamp(2.6rem, 4.4vw, 3.8rem);
+  border-bottom: 1px solid rgba(10,9,8,0.1);
+  cursor: pointer;
+  transition: background 0.45s var(--ease-expo);
 }
-.sRow:hover .sNum { color: var(--terra); }
+.marqRow:hover { background: var(--burgundy); }
 
-.sCenter {
-  position: relative;
-  z-index: 1;
-}
-
-.sTitle {
-  font-family: var(--f-display);
-  font-size: clamp(2rem, 4vw, 3.8rem);
-  font-style: italic;
-  font-weight: 300;
-  color: var(--bg);
-  line-height: 1;
-  transition: color 0.35s;
-}
-.sRow:hover .sTitle { color: var(--cream); }
-
-.sSub {
-  font-family: var(--f-display);
-  font-size: 0.88rem;
-  line-height: 1.6;
-  color: rgba(10,9,8,0.5);
-  margin-top: 0.4rem;
-  transition: color 0.35s;
-}
-.sRow:hover .sSub { color: rgba(240,234,216,0.65); }
-
-.sArrow {
-  font-family: var(--f-mono);
-  font-size: 1.1rem;
-  color: rgba(10,9,8,0.3);
-  position: relative;
-  z-index: 1;
-  transform: translateX(-8px);
-  transition: color 0.35s, transform 0.4s var(--ease-expo);
-}
-.sRow:hover .sArrow {
-  color: var(--terra);
-  transform: translateX(0);
-}
-
-.serviciosCta {
-  padding: 3rem 5rem;
+/* cinta en movimiento */
+.marqTrack {
   display: flex;
-  justify-content: flex-end;
-  border-top: 1px solid rgba(10,9,8,0.1);
+  width: max-content;
+  animation: marqSlide var(--speed, 30s) linear infinite;
 }
+.marqRow:hover .marqTrack { animation-play-state: paused; }
+@keyframes marqSlide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marqGroup {
+  display: flex;
+  flex-shrink: 0;
+}
+.marqUnit {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1.6rem, 3vw, 3rem);
+  padding-right: clamp(1.6rem, 3vw, 3rem);
+  white-space: nowrap;
+}
+/* tipografía outline estilo editorial → se rellena al hover */
+.marqWord {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: clamp(3.2rem, 8.5vw, 7.5rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(10,9,8,0.55);
+  transition: color 0.4s, -webkit-text-stroke-color 0.4s;
+}
+.marqRow:hover .marqWord {
+  font-style: italic;
+  color: var(--cream);
+  -webkit-text-stroke-color: transparent;
+}
+.marqStar {
+  font-size: clamp(1.6rem, 3.4vw, 3rem);
+  color: var(--terra);
+  transition: transform 0.6s var(--ease-expo);
+}
+.marqRow:hover .marqStar { transform: rotate(180deg); }
+
+/* meta: número + descripción + entrar */
+.marqMeta {
+  position: absolute;
+  left: clamp(1.5rem, 5vw, 5rem);
+  right: clamp(1.5rem, 5vw, 5rem);
+  bottom: 0.85rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+}
+.marqNum {
+  font-family: var(--f-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--terra);
+  flex-shrink: 0;
+}
+.marqSub {
+  font-family: var(--f-display);
+  font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+  line-height: 1.45;
+  color: rgba(10,9,8,0.5);
+  transition: color 0.4s;
+  max-width: 64ch;
+}
+.marqRow:hover .marqSub { color: rgba(240,234,216,0.78); }
+.marqGo {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-family: var(--f-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--terra);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.35s, transform 0.4s var(--ease-expo);
+}
+.marqRow:hover .marqGo { opacity: 1; transform: translateX(0); }
 
 .outlineBtn {
   background: none;
@@ -898,10 +916,12 @@
   .quienesText  { padding: 3.5rem 2rem; }
   .decoNum, .decoNumLight { display: none; }
 
-  .servicios { }
   .serviciosHead { flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 4rem 2rem 2rem; }
-  .sRow { grid-template-columns: 3rem 1fr auto; gap: 1.2rem; padding: 2rem 2rem; }
-  .serviciosCta { padding: 2.5rem 2rem; }
+  .serviciosHint { display: none; }
+  /* en touch no hay hover: la cinta queda outline y la meta siempre visible */
+  .marqRow { padding-bottom: 4.4rem; }
+  .marqGo { opacity: 1; transform: none; }
+  .marqMeta { flex-wrap: wrap; gap: 0.5rem 1rem; bottom: 1.1rem; }
 
   .eventos { min-height: auto; }
   .eventosOverlay { padding: 4rem 2rem; }
@@ -941,10 +961,8 @@
   .heroMeta   { font-size: 0.5rem; }
 
   .agenciaStrip { grid-template-columns: repeat(2, 1fr); }
-  .sRow { grid-template-columns: 2.2rem 1fr; padding: 1.6rem 1.5rem; gap: 0.8rem; }
-  .sArrow { display: none; }
   .serviciosHead { padding: 3rem 1.5rem 1.8rem; }
-  .serviciosCta { padding: 2rem 1.5rem; }
+  .marqWord { font-size: clamp(2.6rem, 13vw, 3.4rem); }
   .agencia { padding: 4rem 1.5rem 3rem; }
   .quienesText { padding: 3rem 1.5rem; }
   .estudioPanel { padding: 3rem 1.5rem; }

@@ -184,32 +184,45 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
           </div>
         </div>
 
-        {/* ══ SERVICIOS ══════════════════════════════════════ */}
+        {/* ══ SERVICIOS — marquesinas editoriales ════════════ */}
         <section className={styles.servicios} data-nav="light">
           <div className={styles.serviciosHead}>
             <p className={styles.secLabel}>02 — Servicios</p>
             <h2 className={styles.serviciosH}>Lo que<br /><em>hacemos.</em></h2>
+            <p className={styles.serviciosHint}>↗ Pasá por cada cinta</p>
           </div>
-          <div className={styles.serviciosRows}>
+
+          <div className={styles.marqRows}>
             {([
-              { n: '01', view: 'produccion' as const, title: 'Producción & Dirección', sub: 'Producción de foto y video + dirección creativa. Shooting, locación, arte, estilismo y concepto visual.' },
-              { n: '02', view: 'agencia'    as const, title: 'Agencia de Talentos',     sub: 'Base de datos de fotógrafxs, maquilladorxs, modelxs y creativxs para contratar de forma independiente.' },
-              { n: '03', view: 'eventos'    as const, title: 'Organización de Eventos', sub: 'Eventos pensados desde una mirada creativa y estética, de la idea a la ejecución.' },
-            ]).map(s => (
-              <div key={s.n} className={styles.sRow} onClick={() => navigate(s.view)}>
-                <span className={styles.sNum}>{s.n}</span>
-                <div className={styles.sCenter}>
-                  <h3 className={styles.sTitle}>{s.title}</h3>
-                  <p className={styles.sSub}>{s.sub}</p>
+              { n: '01', view: 'produccion' as const, word: 'Producción & Dirección', sub: 'Foto y video + dirección creativa: shooting, locación, arte, estilismo y concepto visual.' },
+              { n: '02', view: 'agencia'    as const, word: 'Agencia de Talentos',     sub: 'Modelxs, fotógrafxs, maquilladorxs y creativxs para contratar de forma independiente.' },
+              { n: '03', view: 'eventos'    as const, word: 'Eventos',                 sub: 'Experiencias visuales y conceptuales, de la idea inicial a la ejecución.' },
+            ]).map((s, i) => (
+              <div
+                key={s.n}
+                className={styles.marqRow}
+                style={{ '--speed': `${26 + i * 7}s` } as React.CSSProperties}
+                onClick={() => navigate(s.view)}
+              >
+                <div className={styles.marqTrack}>
+                  {[0, 1].map(copy => (
+                    <div key={copy} className={styles.marqGroup} aria-hidden={copy === 1}>
+                      {Array.from({ length: 4 }).map((_, k) => (
+                        <span key={k} className={styles.marqUnit}>
+                          <span className={styles.marqWord}>{s.word}</span>
+                          <span className={styles.marqStar}>☆</span>
+                        </span>
+                      ))}
+                    </div>
+                  ))}
                 </div>
-                <span className={styles.sArrow}>→</span>
+                <div className={styles.marqMeta}>
+                  <span className={styles.marqNum}>{s.n}</span>
+                  <p className={styles.marqSub}>{s.sub}</p>
+                  <span className={styles.marqGo}>Entrar →</span>
+                </div>
               </div>
             ))}
-          </div>
-          <div className={styles.serviciosCta}>
-            <button className={styles.outlineBtn} onClick={() => navigate('produccion')}>
-              Ver producción
-            </button>
           </div>
         </section>
 
