@@ -12,7 +12,7 @@ const ROL_LABEL: Record<string, string> = {
 }
 
 const SERVICIOS = [
-  { n: '01', view: 'produccion' as View, kicker: 'Foto · Video · Dirección', word: 'Producción', sub: 'Foto y video + dirección creativa: shooting, locación, arte, estilismo y concepto visual.', fallback: 'espacio1_wmgx1f' },
+  { n: '01', view: 'produccion' as View, kicker: 'Foto · Video · Dirección', word: 'Producción', sub: 'Foto y video + dirección creativa: shooting, locación, arte, estilismo y concepto visual.', fallback: 'https://res.cloudinary.com/dvj93rlkl/image/upload/q_auto/f_auto/v1781043019/eaz6zr0oclpezpceasa6.jpg' },
   { n: '02', view: 'agencia'    as View, kicker: 'Base de talentos',         word: 'Agencia',    sub: 'Modelxs, fotógrafxs, maquilladorxs y creativxs para contratar de forma independiente.', fallback: 'espacio2_b7rpbk' },
   { n: '03', view: 'eventos'    as View, kicker: 'Experiencias',             word: 'Eventos',    sub: 'Experiencias visuales y conceptuales, de la idea inicial a la ejecución.', fallback: 'WhatsApp_Image_2026-06-09_at_08.29.49_jj8uy2' },
   { n: '04', view: 'estudio'    as View, kicker: 'Alquiler de espacio',      word: 'Estudio',    sub: 'Nuestro estudio para alquilar: sala de fondo infinito, salas privadas y café.', fallback: 'https://res.cloudinary.com/dvj93rlkl/image/upload/q_auto/f_auto/v1781018079/WhatsApp_Image_2026-06-09_at_08.29.49_1_uxgvvq.jpg' },
@@ -238,10 +238,11 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
             onMouseLeave={() => setSvHover(false)}
           >
             {SERVICIOS.map((s, i) => {
+              // Producción y Estudio usan imagen curada (fija); Agencia y Eventos traen la real
               const id =
-                s.view === 'agencia'
-                  ? (talentos[0]?.portada_1 || s.fallback)
-                  : (svCovers[s.view] || s.fallback)
+                s.view === 'agencia' ? (talentos[0]?.portada_1 || s.fallback)
+                : s.view === 'eventos' ? (svCovers.eventos || s.fallback)
+                : s.fallback
               // Las imágenes con public_id se recortan a vertical; las URLs completas las recorta el CSS (object-fit)
               const tx = 'w_900,h_1200,c_fill,g_auto,q_auto,f_auto'
               return (
