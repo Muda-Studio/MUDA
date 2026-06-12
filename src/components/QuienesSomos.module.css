@@ -69,11 +69,11 @@
 .bioCard {
   padding: 2.5rem 2.5rem 2.5rem 2rem;
   border-left: 3px solid var(--terra);
-  background: rgba(240,234,216,0.6);
+  background: rgba(10,9,8,0.035);
   transition: background 0.3s, border-left-color 0.3s;
   cursor: default;
 }
-.bioCard:hover { background: white; border-left-color: var(--burgundy); }
+.bioCard:hover { background: rgba(10,9,8,0.06); border-left-color: var(--burgundy); }
 
 .bioName {
   font-family: var(--f-display);

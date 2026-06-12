@@ -107,7 +107,7 @@
 .cell {
   margin: 0;
   overflow: hidden;
-  background: #f3efe7;
+  background: #f1f1f1;
   box-shadow: 0 14px 36px -14px rgba(10,9,8,0.28);
 }
 .cellImg {
@@ -156,7 +156,7 @@
   border: 1px solid var(--cream);
 }
 .ctaBtn {
-  background: var(--cream);
+  background: #ffffff;
   color: var(--burgundy);
   text-decoration: none;
   margin-bottom: 0.7rem;
@@ -415,7 +415,7 @@ button.dpTitle:hover { color: var(--terra); background: rgba(240,234,216,0.06); 
   cursor: pointer;
   transition: background 0.3s, transform 0.3s, opacity 0.3s;
 }
-.formBtn:hover { background: var(--cream); color: var(--burgundy); transform: translateY(-2px); }
+.formBtn:hover { background: #ffffff; color: var(--burgundy); transform: translateY(-2px); }
 .formBtn:disabled { opacity: 0.6; cursor: default; transform: none; }
 .formError {
   font-family: var(--f-mono);
