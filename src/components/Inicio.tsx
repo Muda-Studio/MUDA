@@ -15,6 +15,7 @@ const SERVICIOS = [
   { n: '01', view: 'produccion' as View, kicker: 'Foto · Video · Dirección', word: 'Producción', sub: 'Foto y video + dirección creativa: shooting, locación, arte, estilismo y concepto visual.', fallback: 'espacio1_wmgx1f' },
   { n: '02', view: 'agencia'    as View, kicker: 'Base de talentos',         word: 'Agencia',    sub: 'Modelxs, fotógrafxs, maquilladorxs y creativxs para contratar de forma independiente.', fallback: 'espacio2_b7rpbk' },
   { n: '03', view: 'eventos'    as View, kicker: 'Experiencias',             word: 'Eventos',    sub: 'Experiencias visuales y conceptuales, de la idea inicial a la ejecución.', fallback: 'WhatsApp_Image_2026-06-09_at_08.29.49_jj8uy2' },
+  { n: '04', view: 'estudio'    as View, kicker: 'Alquiler de espacio',      word: 'Estudio',    sub: 'Nuestro estudio para alquilar: sala de fondo infinito, salas privadas y café.', fallback: 'espacio3_wiwpo3', fx: true },
 ]
 
 type Props = { navigate: (v: View) => void; onCurtainChange?: (open: boolean) => void }
@@ -25,6 +26,7 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
   const [talentos, setTalentos] = useState<Talento[]>([])
   const [selected, setSelected] = useState<Talento | null>(null)
   const [svActive, setSvActive] = useState(0)
+  const [svHover, setSvHover] = useState(false)
   // Portadas reales para el tríptico (última producción / talento / último evento)
   const [svCovers, setSvCovers] = useState<Record<string, string>>({})
 
@@ -42,6 +44,13 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
         setSvCovers(covers)
       })
   }, [])
+
+  // La lámina activa del tríptico rota sola; al pasar el mouse se pausa
+  useEffect(() => {
+    if (svHover) return
+    const id = setInterval(() => setSvActive(a => (a + 1) % SERVICIOS.length), 3600)
+    return () => clearInterval(id)
+  }, [svHover])
 
   // Trae hasta 6 talentos para la tira de Agencia
   useEffect(() => {
@@ -165,6 +174,12 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
         <div className={styles.stickyZone}>
         <section className={styles.quienes} data-nav="light">
           <div className={styles.quienesPhoto}>
+            <img
+              className={styles.quienesImg}
+              src="https://res.cloudinary.com/dvj93rlkl/image/upload/q_auto/f_auto/v1781211893/cv4rjqcprglttxbm1hxt.jpg"
+              alt="Justina y Lucila"
+              loading="lazy"
+            />
             <span className={styles.photoTag}>Justina &amp; Lucila</span>
           </div>
           <div className={styles.quienesText}>
@@ -212,16 +227,22 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
         <section className={styles.servicios} data-nav="light">
           <div className={styles.serviciosHead}>
             <p className={styles.secLabel}>02 — Servicios</p>
-            <h2 className={styles.serviciosH}>Lo que<br /><em>hacemos.</em></h2>
+            <h2 className={styles.serviciosH}>Lo que<br /><em>proyectamos.</em></h2>
           </div>
 
-          {/* Tríptico editorial: cada servicio es una lámina con foto real */}
-          <div className={styles.svTriptych}>
+          {/* Tríptico editorial: cada servicio es una lámina con foto real.
+              La lámina activa rota sola; al pasar el mouse se pausa. */}
+          <div
+            className={styles.svTriptych}
+            onMouseEnter={() => setSvHover(true)}
+            onMouseLeave={() => setSvHover(false)}
+          >
             {SERVICIOS.map((s, i) => {
-              const coverId =
+              const id =
                 s.view === 'agencia'
                   ? (talentos[0]?.portada_1 || s.fallback)
                   : (svCovers[s.view] || s.fallback)
+              const tx = `${s.fx ? `${ESTUDIO_FX},` : ''}w_900,h_1200,c_fill,g_auto,q_auto,f_auto`
               return (
                 <article
                   key={s.n}
@@ -231,7 +252,7 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
                 >
                   <img
                     className={styles.svPanelImg}
-                    src={imgUrl(coverId, 'w_900,h_1200,c_fill,g_auto,q_auto,f_auto')}
+                    src={imgUrl(id, tx)}
                     alt={s.word}
                     loading="lazy"
                   />
