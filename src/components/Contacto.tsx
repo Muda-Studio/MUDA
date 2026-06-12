@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { whatsappLink } from '../lib/config'
 import styles from './Contacto.module.css'
 
 function MagneticLine({ text, italic }: { text: string; italic?: boolean }) {
@@ -31,7 +32,8 @@ function MagneticLine({ text, italic }: { text: string; italic?: boolean }) {
           ref={el => { refs.current[i] = el }}
           style={{ display: 'inline-block', transition: 'transform 0.35s cubic-bezier(0.16,1,0.3,1)' }}
         >
-          {ch}
+          {/* el espacio se renderiza como no-rompible para que no se colapse en inline-block */}
+          {ch === ' ' ? String.fromCharCode(160) : ch}
         </span>
       ))}
     </span>
@@ -49,21 +51,23 @@ export default function Contacto() {
         <div className={styles.layout}>
           <div>
             <h2 className={`${styles.heading} reveal`}>
-              <MagneticLine text="Hablemos" />
-              <MagneticLine text="de tu" />
-              <MagneticLine text="proyecto." italic />
+              <MagneticLine text="Hablemos de" />
+              <MagneticLine text="tu proyecto." italic />
             </h2>
             <a
-              href="mailto:creativeagencymuda@gmail.com"
+              href={whatsappLink('¡Hola MUDA! Quiero hablar sobre un proyecto.')}
+              target="_blank"
+              rel="noopener"
               className={`${styles.cta} reveal d1`}
             >
-              <span>Escribinos</span>
+              <span>Escribinos por WhatsApp →</span>
             </a>
           </div>
 
           <div className={styles.info}>
             {[
               { label: 'Email', value: 'creativeagencymuda@gmail.com', href: 'mailto:creativeagencymuda@gmail.com' },
+              { label: 'Teléfono', value: '+54 9 11 5523-2004', href: whatsappLink('¡Hola MUDA!') },
               { label: 'Instagram', value: '@muda.agcy', href: 'https://www.instagram.com/muda.agcy' },
               { label: 'Ubicación', value: 'Palermo, Buenos Aires, ARG' },
               { label: 'Fundadoras', value: 'Justina Porta & Lucila Beltramino' },
