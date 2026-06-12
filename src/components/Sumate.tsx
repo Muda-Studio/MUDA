@@ -29,8 +29,13 @@ function FotoUpload({ url, onUrl }: { url: string; onUrl: (u: string) => void })
   const handle = async (file: File) => {
     const local = URL.createObjectURL(file)
     setPrev(local); setBusy(true)
-    try { onUrl(await uploadImage(file)) }
-    finally { setBusy(false); URL.revokeObjectURL(local); setPrev(null) }
+    try {
+      onUrl(await uploadImage(file))
+    } catch (err) {
+      alert('No pudimos subir la foto. Probá de nuevo o con otra imagen.\n\n' + (err as Error).message)
+    } finally {
+      setBusy(false); URL.revokeObjectURL(local); setPrev(null)
+    }
   }
 
   const shown = preview ?? (url ? imgUrl(url, 'w_400,h_520,c_fill,q_auto') : null)
@@ -67,11 +72,15 @@ export default function Sumate({ navigate }: Props) {
     e.preventDefault()
     setSending(true)
     const { edad, ...rest } = f
-    await supabase.from('solicitudes').insert({
+    const { error } = await supabase.from('solicitudes').insert({
       ...rest,
       edad: edad ? parseInt(edad) : null,
     })
     setSending(false)
+    if (error) {
+      alert('No pudimos enviar tu solicitud. Probá de nuevo en un momento.\n\n' + error.message)
+      return
+    }
     setDone(true)
   }
 
@@ -205,9 +214,13 @@ export default function Sumate({ navigate }: Props) {
               <input ref={galRef} type="file" accept="image/*" multiple hidden
                 onChange={async e => {
                   const files = Array.from(e.target.files ?? []).slice(0, 6 - f.galeria.length)
-                  for (const file of files) {
-                    const u = await uploadImage(file)
-                    setF(p => ({ ...p, galeria: [...p.galeria, u] }))
+                  try {
+                    for (const file of files) {
+                      const u = await uploadImage(file)
+                      setF(p => ({ ...p, galeria: [...p.galeria, u] }))
+                    }
+                  } catch (err) {
+                    alert('No pudimos subir una de las fotos. Probá de nuevo.\n\n' + (err as Error).message)
                   }
                   e.target.value = ''
                 }} />

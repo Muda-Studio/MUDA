@@ -9,6 +9,9 @@ export function imgUrl(publicId: string, opts = 'w_600,h_800,c_fill,q_auto,f_aut
 }
 
 export async function uploadImage(file: File): Promise<string> {
+  if (!CLOUD || !PRESET) {
+    throw new Error('Falta configurar Cloudinary (cloud name o upload preset).')
+  }
   const fd = new FormData()
   fd.append('file', file)
   fd.append('upload_preset', PRESET)
@@ -18,5 +21,8 @@ export async function uploadImage(file: File): Promise<string> {
     { method: 'POST', body: fd }
   )
   const data = await res.json()
+  if (!res.ok || !data.secure_url) {
+    throw new Error(data?.error?.message || 'No se pudo subir la imagen a Cloudinary.')
+  }
   return data.secure_url as string
 }
