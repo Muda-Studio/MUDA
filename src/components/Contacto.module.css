@@ -1,12 +1,25 @@
 ﻿/* ══ CONTACTO ════════════════════════════════════════════════ */
-.section { background: #ffffff; min-height: 100dvh; }
+/* Ocupa exactamente el alto de la ventana y centra el contenido → sin scroll */
+.section {
+  background: #ffffff;
+  height: 100dvh;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+/* Achicamos el padding vertical heredado (section-inner trae hasta 9rem) */
+.section :global(.section-inner) {
+  width: 100%;
+  padding-top: clamp(2rem, 6vh, 4rem);
+  padding-bottom: clamp(2rem, 6vh, 4rem);
+}
 
 .layout {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
-  gap: 6rem;
+  gap: clamp(2.5rem, 5vw, 6rem);
   align-items: center;
-  min-height: calc(100dvh - 14rem);
 }
 
 .heading {
@@ -16,7 +29,7 @@
   line-height: 0.98;
   letter-spacing: -0.01em;
   color: var(--bg);
-  margin-bottom: 2.5rem;
+  margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
 }
 .heading em { font-style: italic; color: var(--burgundy); }
 
@@ -55,7 +68,7 @@
 }
 
 .item {
-  padding: 1.5rem 0;
+  padding: clamp(0.85rem, 1.6vh, 1.4rem) 0;
   border-bottom: 1px solid rgba(10,9,8,0.08);
   transition: padding-left 0.3s var(--ease-expo);
 }
@@ -83,5 +96,7 @@
 .item a:hover { color: var(--burgundy); }
 
 @media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; gap: 4rem; min-height: auto; }
+  /* en mobile el contenido apilado no entra: dejamos que crezca y scrollee natural */
+  .section { height: auto; min-height: 100dvh; overflow: visible; }
+  .layout { grid-template-columns: 1fr; gap: 3rem; }
 }
