@@ -1,9 +1,9 @@
 ﻿.cursor {
   position: fixed;
   top: 0; left: 0;
-  width: 36px; height: 36px;
-  margin-left: -18px;   /* centra sin usar transform */
-  margin-top: -18px;
+  width: 30px; height: 30px;
+  margin-left: -15px;   /* centra sin usar transform */
+  margin-top: -15px;
   pointer-events: none;
   z-index: 9999;
   will-change: transform;
@@ -23,8 +23,8 @@
   display: block;
   user-select: none;
 }
-/* Solo gira al pasar por un link/botón */
-.hovering .star { animation: spin 1.2s linear infinite; }
+/* Gira SOLO al pasar por un botón (no sobre links ni tarjetas) */
+.onButton .star { animation: spin 1.2s linear infinite; }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
