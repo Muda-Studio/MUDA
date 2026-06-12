@@ -226,8 +226,18 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
         {/* ══ SERVICIOS — índice + panel ═════════════════════ */}
         <section className={styles.servicios} data-nav="light">
           <div className={styles.serviciosHead}>
-            <p className={styles.secLabel}>02 — Servicios</p>
-            <h2 className={styles.serviciosH}>Lo que<br /><em>proyectamos.</em></h2>
+            <div className={styles.serviciosHeadL}>
+              <p className={styles.secLabel}>02 — Servicios</p>
+              <h2 className={styles.serviciosH}>Lo que<br /><em>hacemos.</em></h2>
+            </div>
+            <div className={styles.serviciosHeadR}>
+              <p className={styles.serviciosIntro}>
+                Una productora creativa integral. Resolvemos tu imagen de principio
+                a fin — producción de foto y video, una base de talentos, eventos
+                y nuestro estudio.
+              </p>
+              <p className={styles.serviciosMeta}>Cuatro áreas, una misma mirada</p>
+            </div>
           </div>
 
           {/* Tríptico editorial: cada servicio es una lámina con foto real.

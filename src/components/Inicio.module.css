@@ -390,19 +390,47 @@
 }
 
 .serviciosHead {
+  display: grid;
+  grid-template-columns: 1fr minmax(280px, 30%);
+  align-items: end;
+  gap: clamp(2rem, 6vw, 6rem);
+  padding: clamp(4rem, 7vw, 6.5rem) clamp(1.5rem, 5vw, 5rem) clamp(2.5rem, 3.5vw, 3.5rem);
+  border-bottom: 1px solid rgba(10,9,8,0.1);
+}
+.serviciosHeadL {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 1.1rem;
-  padding: clamp(4rem, 7vw, 6.5rem) clamp(1.5rem, 5vw, 5rem) clamp(2rem, 3vw, 3rem);
+}
+.serviciosHeadR {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  padding-bottom: 0.4rem;
+}
+.serviciosIntro {
+  font-family: var(--f-display);
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(10,9,8,0.62);
+}
+.serviciosMeta {
+  font-family: var(--f-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(10,9,8,0.14);
 }
 
 .serviciosH {
   font-family: var(--f-display);
-  font-size: clamp(2.6rem, 5.5vw, 4.8rem);
+  font-size: clamp(3rem, 6.5vw, 6rem);
   font-weight: 300;
-  line-height: 0.98;
-  letter-spacing: -0.01em;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
   color: var(--bg);
 }
 
@@ -930,7 +958,8 @@
   .quienesText  { padding: 3.5rem 2rem; }
   .decoNum, .decoNumLight { display: none; }
 
-  .serviciosHead { flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 4rem 2rem 2rem; }
+  .serviciosHead { grid-template-columns: 1fr; align-items: start; gap: 1.8rem; padding: 4rem 2rem 2.5rem; }
+  .serviciosHeadR { padding-bottom: 0; }
   /* en touch: láminas apiladas, descripción siempre visible */
   .svTriptych { flex-direction: column; height: auto; padding: 2rem 2rem 3.5rem; }
   .svPanelT, .svPanelTOn { flex: none; height: clamp(220px, 36vh, 320px); }
