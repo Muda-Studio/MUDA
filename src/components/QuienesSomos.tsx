@@ -1,54 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
+import MagneticLine from './MagneticLine'
 import styles from './QuienesSomos.module.css'
 
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ*@#&%?!'
-
 function ScrambleHeading() {
-  const ref = useRef<HTMLHeadingElement>(null)
-  const triggered = useRef(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const spans = el.querySelectorAll<HTMLSpanElement>('[data-char]')
-
-    const obs = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting || triggered.current) return
-      triggered.current = true
-
-      spans.forEach((span, i) => {
-        const final = span.dataset.char!
-        if (final === ' ') return
-        let iter = 0
-        setTimeout(() => {
-          const id = setInterval(() => {
-            span.textContent = iter < final.length
-              ? CHARS[Math.floor(Math.random() * CHARS.length)]
-              : final
-            if (iter >= final.length + 2) { span.textContent = final; clearInterval(id) }
-            iter += 0.6
-          }, 35)
-        }, i * 22)
-      })
-    }, { threshold: 0.3 })
-
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
-
-  const line1 = 'Estética'
-  const line2 = 'con '
-  const line3 = 'propósito.'
-
-  const toSpans = (text: string) =>
-    text.split('').map((ch, i) => (
-      <span key={i} data-char={ch} style={{ display: 'inline-block' }}>{ch}</span>
-    ))
-
   return (
-    <h2 ref={ref} className={styles.heading}>
-      {toSpans(line1)}<br />
-      {toSpans(line2)}<em>{toSpans(line3)}</em>
+    <h2 className={styles.heading}>
+      <MagneticLine text="Estética" />
+      <MagneticLine segments={[{ text: 'con ' }, { text: 'propósito.', italic: true }]} />
     </h2>
   )
 }

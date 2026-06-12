@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import styles from './Eventos.module.css'
 import Portfolio from './Portfolio'
+import MagneticLine from './MagneticLine'
 
 const incluye = [
   'Conceptualización del evento',
@@ -31,7 +32,9 @@ export default function Eventos() {
         <div className={styles.layout}>
           <div className={styles.left}>
             <h2 className={`${styles.heading} reveal`}>
-              Cada evento,<br /><em>una experiencia</em><br />visual y conceptual.
+              <MagneticLine text="Cada evento," />
+              <MagneticLine text="una experiencia" italic />
+              <MagneticLine text="visual y conceptual." />
             </h2>
             <p className={`${styles.desc} reveal d1`}>
               Desarrollamos el servicio de organización de eventos desde una mirada creativa y
@@ -59,7 +62,9 @@ export default function Eventos() {
 
         {/* Galería de eventos realizados */}
         <div className={styles.eventos}>
-          <h3 className={`${styles.eventosH} reveal`}>Eventos <em>realizados.</em></h3>
+          <h3 className={`${styles.eventosH} reveal`}>
+            <MagneticLine segments={[{ text: 'Eventos ' }, { text: 'realizados.', italic: true }]} />
+          </h3>
           <Portfolio categoria="evento" emptyText="Pronto, nuestros eventos…" />
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import type { View } from '../App'
 import styles from './Estudio.module.css'
+import MagneticLine from './MagneticLine'
 import { imgUrl } from '../lib/cloudinary'
 import { ESTUDIO_FX } from '../lib/estudioFotos'
 import { whatsappLink, WEB3FORMS_KEY, MUDA_EMAIL } from '../lib/config'
@@ -403,7 +404,9 @@ export default function Estudio({ navigate }: { navigate: (v: View) => void }) {
       {/* ── Encabezado ── */}
       <header className={styles.head}>
         <p className={styles.eyebrow}>Palermo · Buenos Aires</p>
-        <h2 className={styles.headTitle}>El <em>estudio.</em></h2>
+        <h2 className={styles.headTitle}>
+          <MagneticLine segments={[{ text: 'El ' }, { text: 'estudio.', italic: true }]} />
+        </h2>
         <p className={styles.headText}>
           En MUDA contamos con un espacio en Palermo pensado para la realización de
           producciones fotográficas, audiovisuales y proyectos creativos de todo tipo.
@@ -432,7 +435,10 @@ export default function Estudio({ navigate }: { navigate: (v: View) => void }) {
       {/* ── CTA con formulario ── */}
       <div className={styles.cta}>
         <div className={styles.ctaLeft}>
-          <h3 className={styles.ctaTitle}>¿Reservás<br />tu <em>producción?</em></h3>
+          <h3 className={styles.ctaTitle}>
+            <MagneticLine text="¿Reservás" />
+            <MagneticLine segments={[{ text: 'tu ' }, { text: 'producción?', italic: true }]} />
+          </h3>
           <p className={styles.ctaText}>
             Contános tu proyecto y armamos la jornada en el estudio. Podés sumar
             maquilladora y fotógrafe profesional, a criterio de cada cliente.

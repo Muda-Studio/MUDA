@@ -4,6 +4,7 @@ import type { View } from '../App'
 import { supabase, type Talento } from '../lib/supabase'
 import { imgUrl } from '../lib/cloudinary'
 import { whatsappLink } from '../lib/config'
+import MagneticLine from './MagneticLine'
 import styles from './Agencia.module.css'
 
 const tabs = [
@@ -228,7 +229,7 @@ export default function Agencia({ navigate }: { navigate?: (v: View) => void }) 
         <div className={styles.intro}>
           <p className={styles.label}>☆ Agencia</p>
           <h2 className={styles.heading}>
-            Base de <em>talentos.</em>
+            <MagneticLine segments={[{ text: 'Base de ' }, { text: 'talentos.', italic: true }]} />
           </h2>
           <p className={styles.desc}>
             Una red curada de modelxs, fotógrafxs y maquilladorxs.<br />
@@ -258,7 +259,10 @@ export default function Agencia({ navigate }: { navigate?: (v: View) => void }) 
         <div className={styles.joinBand}>
           <div className={styles.joinText}>
             <p className={styles.joinLabel}>¿Querés formar parte?</p>
-            <h3 className={styles.joinTitle}>Sumate a<br /><em>la base.</em></h3>
+            <h3 className={styles.joinTitle}>
+              <MagneticLine text="Sumate a" />
+              <MagneticLine text="la base." italic />
+            </h3>
           </div>
           <div className={styles.joinActions}>
             <button className={styles.joinBtn} onClick={() => navigate?.('sumate')}>

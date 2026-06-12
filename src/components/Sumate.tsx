@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import type { View } from '../App'
 import { supabase, type Categoria } from '../lib/supabase'
 import { uploadImage, imgUrl } from '../lib/cloudinary'
+import MagneticLine from './MagneticLine'
 import styles from './Sumate.module.css'
 
 type Props = { navigate: (v: View) => void }
@@ -89,7 +90,10 @@ export default function Sumate({ navigate }: Props) {
       <section className={styles.section} data-nav="light">
         <div className={styles.doneWrap}>
           <span className={styles.doneStar}>☆</span>
-          <h1 className={styles.doneTitle}>¡Recibimos<br /><em>tu solicitud!</em></h1>
+          <h1 className={styles.doneTitle}>
+            <MagneticLine text="¡Recibimos" />
+            <MagneticLine text="tu solicitud!" italic />
+          </h1>
           <p className={styles.doneText}>
             Vamos a revisar tu perfil y te contactamos pronto.
             Gracias por querer ser parte de MUDA.
@@ -104,7 +108,10 @@ export default function Sumate({ navigate }: Props) {
     <section className={styles.section} data-nav="light">
       <div className={styles.inner}>
         <p className={styles.label}>☆ Sumate a la base</p>
-        <h1 className={styles.title}>Formá parte<br /><em>de MUDA.</em></h1>
+        <h1 className={styles.title}>
+          <MagneticLine text="Formá parte" />
+          <MagneticLine text="de MUDA." italic />
+        </h1>
         <p className={styles.intro}>
           Completá tus datos para entrar a nuestra base de talentos. No pasa nada si nunca
           posaste o recién empezás — lo revisamos y te contactamos.

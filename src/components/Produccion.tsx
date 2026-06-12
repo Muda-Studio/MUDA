@@ -1,5 +1,6 @@
 import styles from './Produccion.module.css'
 import Portfolio from './Portfolio'
+import MagneticLine from './MagneticLine'
 
 export default function Produccion() {
   return (
@@ -7,7 +8,10 @@ export default function Produccion() {
       <div className="section-inner">
         <div className={styles.head}>
           <p className="section-label reveal">☆ Producción</p>
-          <h2 className={`${styles.heading} reveal`}>Nuestras<br /><em>producciones.</em></h2>
+          <h2 className={`${styles.heading} reveal`}>
+            <MagneticLine text="Nuestras" />
+            <MagneticLine text="producciones." italic />
+          </h2>
           <p className={`${styles.lead} reveal d1`}>
             Producción y dirección integral de foto y video. Cada proyecto, su propio mundo
             visual — pasá por el índice y entrá a cada producción.

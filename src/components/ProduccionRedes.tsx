@@ -1,3 +1,4 @@
+import MagneticLine from './MagneticLine'
 import styles from './ProduccionServicio.module.css'
 
 const incluye = [
@@ -27,7 +28,9 @@ export default function ProduccionRedes() {
         </div>
 
         <h1 className={styles.heading}>
-          Contenido<br />para<br /><em>Redes.</em>
+          <MagneticLine text="Contenido" />
+          <MagneticLine text="para" />
+          <MagneticLine text="Redes." italic />
         </h1>
 
         <div className={styles.body}>

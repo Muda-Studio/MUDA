@@ -5,6 +5,7 @@ import { supabase, type Talento } from '../lib/supabase'
 import { imgUrl } from '../lib/cloudinary'
 import { ESTUDIO_FX } from '../lib/estudioFotos'
 import { TalentDetail } from './Agencia'
+import MagneticLine from './MagneticLine'
 import styles from './Inicio.module.css'
 
 const ROL_LABEL: Record<string, string> = {
@@ -186,7 +187,8 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
             <span className={styles.decoNum}>01</span>
             <p className={styles.secLabel}>Quiénes somos</p>
             <h2 className={styles.quienesH}>
-              Estética<br /><em>con propósito.</em>
+              <MagneticLine text="Estética" />
+              <MagneticLine text="con propósito." italic />
             </h2>
             <p className={styles.body}>
               Somos Justina Porta y Lucila Beltramino — productoras de moda formadas
@@ -228,7 +230,10 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
           <div className={styles.serviciosHead}>
             <div className={styles.serviciosHeadL}>
               <p className={styles.secLabel}>02 — Servicios</p>
-              <h2 className={styles.serviciosH}>Lo que<br /><em>hacemos.</em></h2>
+              <h2 className={styles.serviciosH}>
+                <MagneticLine text="Lo que" />
+                <MagneticLine text="hacemos." italic />
+              </h2>
             </div>
             <div className={styles.serviciosHeadR}>
               <p className={styles.serviciosIntro}>
@@ -289,7 +294,9 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
           <div className={styles.eventosOverlay}>
             <p className={styles.secLabelLight}>03 — Organización de eventos</p>
             <h2 className={styles.eventosH}>
-              Cada evento,<br /><em>una experiencia</em><br />visual y conceptual.
+              <MagneticLine text="Cada evento," />
+              <MagneticLine text="una experiencia" italic />
+              <MagneticLine text="visual y conceptual." />
             </h2>
             <div className={styles.eventosBottom}>
               <p className={styles.eventosBody}>
@@ -305,7 +312,9 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
         <section className={styles.agencia} data-nav="light">
           <div className={styles.agenciaHead}>
             <p className={styles.secLabel}>04 — Agencia</p>
-            <h2 className={styles.agenciaH}>Base de <em>talentos.</em></h2>
+            <h2 className={styles.agenciaH}>
+              <MagneticLine segments={[{ text: 'Base de ' }, { text: 'talentos.', italic: true }]} />
+            </h2>
             <p className={styles.agenciaBody}>
               Modelxs, fotógrafxs y maquilladorxs disponibles para<br />
               contratar de forma independiente, sin producción completa.
@@ -349,7 +358,10 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
           <div className={styles.estudioHead}>
             <div>
               <p className={styles.secLabelLight}>05 — Estudio</p>
-              <h2 className={styles.estudioH}>El espacio donde<br />todo <em>cobra vida.</em></h2>
+              <h2 className={styles.estudioH}>
+                <MagneticLine text="El espacio donde" />
+                <MagneticLine segments={[{ text: 'todo ' }, { text: 'cobra vida.', italic: true }]} />
+              </h2>
             </div>
             <div className={styles.estudioHeadRight}>
               <p className={styles.estudioBody}>
@@ -382,7 +394,10 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
 
         {/* ══ CONTACTO ═══════════════════════════════════════ */}
         <section className={styles.contacto} data-nav="light">
-          <h2 className={styles.contactoH}>¿Tenés un<br /><em>proyecto?</em></h2>
+          <h2 className={styles.contactoH}>
+            <MagneticLine text="¿Tenés un" />
+            <MagneticLine text="proyecto?" italic />
+          </h2>
           <div className={styles.contactoRight}>
             <p className={styles.contactoSub}>Nos encargamos de todo lo que necesitás para proyectar tu imagen.</p>
             <div className={styles.contactoActions}>
