@@ -1,0 +1,5 @@
+# MUDA — robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://mudaagency.com/sitemap.xml
