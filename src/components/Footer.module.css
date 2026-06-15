@@ -3,10 +3,17 @@
   padding: 2rem clamp(1.5rem, 5vw, 4rem);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   border-top: 1px solid rgba(240,234,216,0.06);
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  flex-wrap: wrap;
 }
 
 .footer p {
@@ -22,3 +29,17 @@
   letter-spacing: 0.3em;
   color: var(--cream-dim);
 }
+
+/* Crédito de desarrollo */
+.credit {
+  font-family: var(--f-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: rgba(184,176,160,0.55);
+}
+.credit a {
+  color: var(--terra);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.credit a:hover { color: var(--cream); }

@@ -6,6 +6,7 @@ import { imgUrl } from '../lib/cloudinary'
 import { ESTUDIO_FX } from '../lib/estudioFotos'
 import { TalentDetail } from './Agencia'
 import MagneticLine from './MagneticLine'
+import Footer from './Footer'
 import styles from './Inicio.module.css'
 
 const ROL_LABEL: Record<string, string> = {
@@ -411,6 +412,8 @@ export default function Inicio({ navigate, onCurtainChange }: Props) {
             <span>Palermo, Buenos Aires</span>
           </div>
         </section>
+
+        <Footer />
       </div>
     </>
   )
