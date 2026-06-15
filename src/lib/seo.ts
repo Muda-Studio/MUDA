@@ -1,6 +1,6 @@
 import type { View } from '../App'
 
-export const SITE_URL = 'https://mudaagency.com'
+export const SITE_URL = 'https://mudaagcy.com'
 
 /* ── Mapa sección ⇄ URL ──────────────────────────────────────────
    Cada sección tiene su propia URL real para que Google la indexe

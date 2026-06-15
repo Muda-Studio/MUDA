@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mudaagency.com/sitemap.xml
+Sitemap: https://mudaagcy.com/sitemap.xml
